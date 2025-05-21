@@ -1,0 +1,62 @@
+﻿@page "/create-listing"
+@rendermode InteractiveServer
+@inject ListingService listingService
+
+<h3>Create Listing</h3>
+
+<EditForm Model="@listingModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <!-- Title field -->
+    <div class="mb-3">
+        <label for="title">Title:</label>
+        <InputText id="title" class="form-control" @bind-Value="listingModel.Title" />
+        <ValidationMessage For="@(() => listingModel.Title)" />
+    </div>
+
+    <!-- Price field -->
+    <div class="mb-3">
+        <label for="price">Price:</label>
+        <InputNumber id="price" class="form-control" @bind-Value="listingModel.Price" />
+        <ValidationMessage For="@(() => listingModel.Price)" />
+    </div>
+
+    <!-- Description field -->
+    <div class="mb-3">
+        <label for="description">Description:</label>
+        <InputTextArea id="description" class="form-control" @bind-Value="listingModel.Description" rows="3" />
+        <ValidationMessage For="@(() => listingModel.Description)" />
+    </div>
+
+    <!-- Category field -->
+    <div class="mb-3">
+        <label for="category">Category:</label>
+        <InputSelect id="category" class="form-select" @bind-Value="listingModel.Category">
+            <option value="">-- select category --</option>
+            <option value="Beer">Beer</option>
+            <option value="Wiskey">Wiskey</option>
+            <option value="Wine">Wine</option>
+        </InputSelect>
+        <ValidationMessage For="@(() => listingModel.Category)" />
+    </div>
+
+    <!-- Image URL field -->
+    <div class="mb-3">
+        <label for="imageUrl">Image URL:</label>
+        <InputText id="imageUrl" class="form-control" @bind-Value="listingModel.ImageUrl" />
+        <ValidationMessage For="@(() => listingModel.ImageUrl)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Listing</button>
+</EditForm>
+
+@code {
+    private Listing listingModel { get; set; } = new Listing();
+
+    private void HandleValidSubmit()
+    {
+        listingService.AddListing(listingModel);
+        listingModel = new Listing();
+    }
+}

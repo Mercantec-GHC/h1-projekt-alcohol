@@ -1,0 +1,51 @@
+﻿@page "/listings"
+@rendermode InteractiveServer
+@inject ListingService listingService
+
+<h3>All Listings</h3>
+
+@if (!listings.Any())
+{
+    <p>No listings yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Image URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in listings)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@item.Description</td>
+                    <td>@item.Category</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                        {
+                            <a href="@item.ImageUrl" target="_blank">View</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Listing> listings = Array.Empty<Listing>();
+
+    protected override void OnInitialized()
+    {
+
+        listings = listingService.GetAllListings();//download all the listnig from in-memory
+    }
+}
