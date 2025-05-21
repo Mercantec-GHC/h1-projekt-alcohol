@@ -1,0 +1,46 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+
+@if (ShowGate)
+{
+    <div class="age-gate-overlay">
+        <div class="age-gate-modal">
+            <h4>Are you 18 or older?</h4>
+            <button class="btn btn-primary me-2" @onclick="() => Confirm(true)">Yes</button>
+            <button class="btn btn-secondary" @onclick="() => Confirm(false)">No</button>
+        </div>
+    </div>
+}
+
+@code {
+    private bool ShowGate = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+
+        var stored = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "isOver18");
+      
+        ShowGate = stored != "true";
+        StateHasChanged();
+    }
+
+    private async Task Confirm(bool over18)
+    {
+      
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "isOver18", over18.ToString().ToLower());
+        if (over18)
+        {
+            
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+           
+            ShowGate = true;
+        }
+    }
+}
