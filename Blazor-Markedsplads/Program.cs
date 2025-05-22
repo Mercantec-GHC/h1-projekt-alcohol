@@ -1,10 +1,13 @@
 using Blazor_Markedsplads.Components;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddSingleton<ListingService>();
+//builder.Services.AddScoped<DBService>();
 
 var app = builder.Build();
 

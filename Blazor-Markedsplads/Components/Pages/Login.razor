@@ -1,0 +1,44 @@
+﻿@page "/login"
+@using Blazor_Markedsplads.Models
+@inject NavigationManager Navigation
+
+<h3>User Login</h3>
+
+<EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="loginModel.Email" placeholder="Enter your email" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Password" placeholder="Enter your password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@code {
+    private LoginModel loginModel = new();
+
+    private void HandleLogin()
+    {
+        // TODO: Inject a service (e.g., IAuthService) to verify credentials against the database
+        // Example stub:
+        // var user = await AuthService.ValidateUserAsync(loginModel.Email, loginModel.Password);
+        // if (user != null)
+        // {
+        //     // On success, redirect or set auth state
+        //     Navigation.NavigateTo("/");
+        // }
+        // else
+        // {
+        //     // Show error (e.g., invalid credentials)
+        // }
+
+        // Temporary navigation for testing:
+        Navigation.NavigateTo("/");
+    }
+}
