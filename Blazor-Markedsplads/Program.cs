@@ -1,4 +1,5 @@
 using Blazor_Markedsplads.Components;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<ListingService>();
+//builder.Services.AddScoped<DBService>();
 
 var app = builder.Build();
 
