@@ -9,6 +9,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSingleton<ListingService>();
 //builder.Services.AddScoped<DBService>();
 
+builder.Services.AddScoped<DBService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
