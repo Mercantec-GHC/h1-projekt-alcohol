@@ -1,14 +1,73 @@
 ﻿@page "/"
-
+@rendermode InteractiveServer
 @inject DBService DBService 
 
-//Ternary:
+<button @onclick="GetUsers">Get Users</button>
+<div class="Customer_Container">
+    @foreach (var customer in customers)
+    {
+        <div class="Customer_Box">
+            <div class="profile-circle"></div>
+            <div class="Customer_details">
+                <li>@customer.Name</li>
+                <li>@customer.Email</li>
+                @*<li>@(new string('*', customer.Password.Length))</li>*@
+                <li>@customer.Age</li>
+                <li>@customer.Address</li>
+                <li>@customer.Phone</li>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+.Customer_Container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.Customer_Box {
+    width: 250px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    transition: transform 0.3s ease-in-out;
+}
+
+.customer-box:hover {
+    transform: scale(1.05);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.profile-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #3498db; /* Change color if needed */
+    display: block;
+    margin: 0 auto 10px;
+}
+</style>
+
+
+@*Ternary:*@
 <p>@(isConnected ? "Connected to the database" : "Not connected to the database")</p>
 
 @code {
+    List<Customer> customers = new List<Customer>();
+
+    private async Task GetUsers()
+    {
+        customers = await DBService.GetAllUsers();
+    }
+
     bool isConnected = false;
     protected override async Task OnInitializedAsync()
     {
         isConnected = await DBService.TestConnectionAsync();
     }
+    
+    
 }

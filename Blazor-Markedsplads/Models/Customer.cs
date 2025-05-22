@@ -11,6 +11,6 @@ namespace Blazor_Markedsplads.Models
         public string Address { get; set; }
         public int Phone { get; set; }
         public bool IsSeller { get; set; }
-        [Required, MinLength(6)] public string Password { get; set; }
+        [Required, MinLength(6)] public string? Password { get; set; }
     }
 }

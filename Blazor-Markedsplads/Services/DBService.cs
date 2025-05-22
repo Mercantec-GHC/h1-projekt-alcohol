@@ -41,8 +41,11 @@ public partial class DBService
                                 ID = reader.GetInt32(reader.GetOrdinal("id")),
                                 Name = reader.GetString(reader.GetOrdinal("name")),
                                 Email = reader.GetString(reader.GetOrdinal("email")),
-                                Password = reader.GetString(reader
-                                .GetOrdinal("password"))
+                                //*Password = reader.GetString(reader
+                                //.GetOrdinal("password")),
+                                Age = reader.GetInt32(reader.GetOrdinal("age")),
+                                Address = reader.GetString(reader.GetOrdinal("address")),
+                                Phone = reader.GetInt32(reader.GetOrdinal("phone"))
                             }
                         );
                     }
