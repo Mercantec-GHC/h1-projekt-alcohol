@@ -1,0 +1,57 @@
+﻿@page "/register"
+@using Blazor_Markedsplads.Models
+@inject NavigationManager Navigation
+
+<h3>User Registration</h3>
+
+<EditForm Model="newCustomer" OnValidSubmit="HandleRegister">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="newCustomer.Name" placeholder="Enter your name" />
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="newCustomer.Email" placeholder="Enter your email" />
+    </div>
+    <div class="form-group">
+        <label for="age">Age</label>
+        <InputNumber id="age" class="form-control" @bind-Value="newCustomer.Age" placeholder="Enter your age" />
+    </div>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <InputText id="address" class="form-control" @bind-Value="newCustomer.Address" placeholder="Enter your address" />
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone</label>
+        <InputNumber id="phone" class="form-control" @bind-Value="newCustomer.Phone" placeholder="Enter your phone number" />
+    </div>
+    <div class="form-group form-check">
+        <InputCheckbox id="isSeller" class="form-check-input" @bind-Value="newCustomer.IsSeller" />
+        <label class="form-check-label" for="isSeller">Is Seller?</label>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" type="password" class="form-control" @bind-Value="newCustomer.Password" placeholder="Enter a password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@code {
+    private Customer newCustomer = new();
+
+    private void HandleRegister()
+    {
+        // TODO: Inject a service (e.g., ICustomerService) to save to the database
+        // Password hashing and persistence handled in data layer
+
+        // Example stub for future data layer:
+        // await CustomerService.CreateAsync(newCustomer);
+
+        // Navigate to login or confirmation page
+        Navigation.NavigateTo("/login");
+    }
+}
