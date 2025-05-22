@@ -24,10 +24,21 @@
         <label for="address">Address</label>
         <InputText id="address" class="form-control" @bind-Value="newCustomer.Address" placeholder="Enter your address" />
     </div>
+
+  <div class="form-group">
+        <label for="City">City</label>
+        <InputText id="city" class="form-control" @bind-Value="newCustomer.City" placeholder="Enter your city" />
+    </div>
+    <div class="form-group">
+        <label for="zipcode">Zip Code</label>
+        <InputNumber id="zipcode" class="form-control" @bind-Value="newCustomer.ZipCode" placeholder="Enter your zip code" />
+    </div>
+    
     <div class="form-group">
         <label for="phone">Phone</label>
         <InputNumber id="phone" class="form-control" @bind-Value="newCustomer.Phone" placeholder="Enter your phone number" />
     </div>
+
     <div class="form-group form-check">
         <InputCheckbox id="isSeller" class="form-check-input" @bind-Value="newCustomer.IsSeller" />
         <label class="form-check-label" for="isSeller">Is Seller?</label>
