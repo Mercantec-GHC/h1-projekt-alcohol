@@ -2,6 +2,8 @@
 
 public class Listing
 {
+    public int ID { get; set; }
+
     [Required(ErrorMessage = "Title is required")]
     [StringLength(100, ErrorMessage = "Title can be up to 100 characters")]
     public string Title { get; set; } = string.Empty;
@@ -19,4 +21,6 @@ public class Listing
     [Required(ErrorMessage = "Image URL is required")]
     [StringLength(2083, ErrorMessage = "URL is too long")]  // 2083 is a common max URL length
     public string ImageUrl { get; set; } = string.Empty;
+
+
 }
