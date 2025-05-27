@@ -53,23 +53,23 @@ public partial class DBService
         }
     }
 
-    public async Task<bool> AddListingAsync(Listing listing)
+    public async Task<bool> AddListingAsync(Product listing)
     {
         try
         {
             using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
-
-            string query = "INSERT INTO listing (product_id, customer_id, title, description, price, category, image_url) VALUES (@productId, @customerId, @title, @description, @price, @category, @imageUrl)";
+            //describtion, image_url - @describtion, @imageurl
+            string query = "INSERT INTO product (customer_id, product_name, price, product_type) VALUES (@customerId, @product_name, @price, @product_type)";
 
             using var command = new NpgsqlCommand(query, connection);
-            // command.Parameters.AddWithValue("@productId", listing.ProductId);
-            // command.Parameters.AddWithValue("@customerId", listing.CustomerId);
-            command.Parameters.AddWithValue("@title", listing.Title);
-            command.Parameters.AddWithValue("@description", listing.Description ?? (object)DBNull.Value);
+
+            command.Parameters.AddWithValue("@customerId", listing.CustomerID);
+            command.Parameters.AddWithValue("@product_name", listing.ProductName);
+            // command.Parameters.AddWithValue("@description", listing.Description ?? (object)DBNull.Value);
             command.Parameters.AddWithValue("@price", listing.Price);
-            command.Parameters.AddWithValue("@category", listing.Category);
-            command.Parameters.AddWithValue("@imageUrl", listing.ImageUrl);
+            command.Parameters.AddWithValue("@product_type", listing.ProductType);
+            // command.Parameters.AddWithValue("@imageUrl", listing.ImageUrl);
 
             return await command.ExecuteNonQueryAsync() > 0;
         }
@@ -81,34 +81,33 @@ public partial class DBService
         }
     }
 
-    public async Task<List<Listing>> GetAllListingsAsync()
-{
-    var listings = new List<Listing>();
-
-    using var connection = new NpgsqlConnection(_connectionString);
-    await connection.OpenAsync();
-
-    string query = "SELECT * FROM listing";
-
-    using var command = new NpgsqlCommand(query, connection);
-    using var reader = await command.ExecuteReaderAsync();
-
-    while (await reader.ReadAsync())
+    //Added ListingService into DBService, 
+    // so to keep database operations in one place
+    public async Task<List<Product>> GetAllListingsAsync()
     {
-        listings.Add(new Listing
+        var listings = new List<Product>();
+
+        using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        string query = "SELECT * FROM product";
+
+        using var command = new NpgsqlCommand(query, connection);
+        using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
         {
-            ID = reader.GetInt32(reader.GetOrdinal("id")),
-            // ProductId = reader.GetInt32(reader.GetOrdinal("product_id")),
-            // CustomerId = reader.GetInt32(reader.GetOrdinal("customer_id")),
-            Title = reader.GetString(reader.GetOrdinal("title")),
-            Description = reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString(reader.GetOrdinal("description")),
-            Price = reader.GetDecimal(reader.GetOrdinal("price")),
-            Category = reader.GetString(reader.GetOrdinal("category")),
-            ImageUrl = reader.GetString(reader.GetOrdinal("image_url"))
-        });
+            listings.Add(new Product
+            {
+                ID = reader.GetInt32(reader.GetOrdinal("id")),
+                ProductName = reader.GetString(reader.GetOrdinal("product_name")),
+                // Description = reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString(reader.GetOrdinal("description")),
+                Price = reader.GetDecimal(reader.GetOrdinal("price")),
+                ProductType = reader.GetString(reader.GetOrdinal("product_type")),
+                // ImageUrl = reader.GetString(reader.GetOrdinal("image_url")),
+                CustomerID = reader.GetInt32(reader.GetOrdinal("customer_id"))
+            });
+        }
+        return listings;
     }
-    return listings;
-}
-
-
 }

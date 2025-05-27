@@ -1,6 +1,7 @@
 ﻿@page "/listings"
 @rendermode InteractiveServer
 @inject ListingService listingService
+@inject DBService dbService
 
 <h3>All Listings</h3>
 
@@ -15,37 +16,50 @@ else
             <tr>
                 <th>Title</th>
                 <th>Price</th>
-                <th>Description</th>
+                @* <th>Description</th> *@
                 <th>Category</th>
-                <th>Image URL</th>
+                @* <th>Image URL</th> *@
+                <th>Customer</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in listings)
             {
                 <tr>
-                    <td>@item.Title</td>
+                    <td>@item.ProductName</td>
                     <td>@item.Price.ToString("C")</td>
-                    <td>@item.Description</td>
-                    <td>@item.Category</td>
-                    <td>
+                    @* <td>@item.Description</td> *@
+                    <td>@item.ProductType</td>
+                    @* <td>
                         @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
                         {
                             <a href="@item.ImageUrl" target="_blank">View</a>
                         }
-                    </td>
+                    </td> *@
                 </tr>
+                
             }
         </tbody>
     </table>
 }
 
 @code {
-    private IEnumerable<Listing> listings = Array.Empty<Listing>();
+
+    @inject DBService dbService
+
+@code {
+    private List<Product> listings = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        listings = await dbService.GetAllListingsAsync();
+    }
+}
+
+    @* private IEnumerable<Product> listings = Array.Empty<Product>();
 
     protected override void OnInitialized()
     {
-
         listings = listingService.GetAllListings();//download all the listnig from in-memory
-    }
+    } *@
 }

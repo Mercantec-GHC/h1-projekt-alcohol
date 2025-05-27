@@ -1,6 +1,7 @@
 ﻿@page "/create-listing"
 @rendermode InteractiveServer
 @inject ListingService listingService
+@inject DBService dbService
 
 <h3>Create Listing</h3>
 
@@ -11,8 +12,8 @@
     <!-- Title field -->
     <div class="mb-3">
         <label for="title">Title:</label>
-        <InputText id="title" class="form-control" @bind-Value="listingModel.Title" />
-        <ValidationMessage For="@(() => listingModel.Title)" />
+        <InputText id="title" class="form-control" @bind-Value="listingModel.ProductName" />
+        <ValidationMessage For="@(() => listingModel.ProductName)" />
     </div>
 
     <!-- Price field -->
@@ -23,30 +24,30 @@
     </div>
 
     <!-- Description field -->
-    <div class="mb-3">
+    @* <div class="mb-3">
         <label for="description">Description:</label>
         <InputTextArea id="description" class="form-control" @bind-Value="listingModel.Description" rows="3" />
         <ValidationMessage For="@(() => listingModel.Description)" />
-    </div>
+    </div> *@
 
     <!-- Category field -->
     <div class="mb-3">
         <label for="category">Category:</label>
-        <InputSelect id="category" class="form-select" @bind-Value="listingModel.Category">
+        <InputSelect id="category" class="form-select" @bind-Value="listingModel.ProductType">
             <option value="">-- select category --</option>
             <option value="Beer">Beer</option>
             <option value="Wiskey">Wiskey</option>
             <option value="Wine">Wine</option>
         </InputSelect>
-        <ValidationMessage For="@(() => listingModel.Category)" />
+        <ValidationMessage For="@(() => listingModel.ProductType)" />
     </div>
 
     <!-- Image URL field -->
-    <div class="mb-3">
+    @* <div class="mb-3">
         <label for="imageUrl">Image URL:</label>
         <InputText id="imageUrl" class="form-control" @bind-Value="listingModel.ImageUrl" />
         <ValidationMessage For="@(() => listingModel.ImageUrl)" />
-    </div>
+    </div> *@
 
     <button type="submit" class="btn btn-primary">Create Listing</button>
 </EditForm>
@@ -61,6 +62,7 @@
 .form-label {
     font-weight: bold;
 }
+    using Microsoft.VisualBasic;
 
 .btn-primary {
     background-color: #007bff;
@@ -84,13 +86,22 @@
 }
 </style>
 
-@code {
-    private Listing listingModel { get; set; } = new Listing();
 
-    private void HandleValidSubmit()
+@code {
+    
+    private Product listingModel { get; set; } = new Product();
+
+    private async Task HandleValidSubmit()
     {
+        //Cannot check for customer, as login and register system is not yet setup.
         @* listingModel.CustomerID = currentUserID; *@
-        listingService.AddListing(listingModel);
-        listingModel = new Listing();
+
+        listingModel.CustomerID = 1; //Temporary test ID
+        bool success = await dbService.AddListingAsync(listingModel);
+
+        if(success)
+        {
+            listingModel = new Product();
+        }
     }
 }
