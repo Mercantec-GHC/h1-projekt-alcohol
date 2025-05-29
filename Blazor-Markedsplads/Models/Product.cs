@@ -18,8 +18,8 @@ public class Product
     [Required(ErrorMessage = "Category is required")]
     public string ProductType { get; set; } = string.Empty; //Category
 
-    [Required(ErrorMessage = "Image URL is required")]
-    [StringLength(2083, ErrorMessage = "URL is too long")]  // 2083 is a common max URL length
+    // [Required(ErrorMessage = "Image URL is required")]
+    // [StringLength(2083, ErrorMessage = "URL is too long")]  // 2083 is a common max URL length
     // public string ImageUrl { get; set; } = string.Empty;
 
     public decimal Percent { get; set; }

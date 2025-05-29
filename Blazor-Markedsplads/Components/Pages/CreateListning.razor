@@ -5,74 +5,102 @@
 
 <h3>Create Listing</h3>
 
-<EditForm Model="@listingModel" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<div class="listing-container">
+    <EditForm Model="@listingModel" OnValidSubmit="async () => await HandleValidSubmit()">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-    <!-- Title field -->
-    <div class="mb-3">
-        <label for="title">Title:</label>
-        <InputText id="title" class="form-control" @bind-Value="listingModel.ProductName" />
-        <ValidationMessage For="@(() => listingModel.ProductName)" />
-    </div>
+        <!-- Title field -->
+        <div class="mb-3">
+            <label for="title">Title:</label>
+            <InputText id="title" class="form-control" @bind-Value="listingModel.ProductName" />
+            <ValidationMessage For="@(() => listingModel.ProductName)" />
+        </div>
 
-    <!-- Price field -->
-    <div class="mb-3">
-        <label for="price">Price:</label>
-        <InputNumber id="price" class="form-control" @bind-Value="listingModel.Price" />
-        <ValidationMessage For="@(() => listingModel.Price)" />
-    </div>
+        <!-- Price field -->
+        <div class="mb-3">
+            <label for="price">Price:</label>
+            <InputNumber id="price" class="form-control" @bind-Value="listingModel.Price" />
+            <ValidationMessage For="@(() => listingModel.Price)" />
+        </div>
 
-    <!-- Description field -->
-    @* <div class="mb-3">
+        <!-- Description field -->
+        @* <div class="mb-3">
         <label for="description">Description:</label>
         <InputTextArea id="description" class="form-control" @bind-Value="listingModel.Description" rows="3" />
         <ValidationMessage For="@(() => listingModel.Description)" />
     </div> *@
 
-    <!-- Category field -->
-    <div class="mb-3">
-        <label for="category">Category:</label>
-        <InputSelect id="category" class="form-select" @bind-Value="listingModel.ProductType">
-            <option value="">-- select category --</option>
-            <option value="Beer">Beer</option>
-            <option value="Wiskey">Wiskey</option>
-            <option value="Wine">Wine</option>
-        </InputSelect>
-        <ValidationMessage For="@(() => listingModel.ProductType)" />
-    </div>
+        <!-- Category field -->
+        <div class="mb-3">
+            <label for="category">Category:</label>
+            <InputSelect id="category" class="form-select" @bind-Value="listingModel.ProductType">
+                <option value="">-- select category --</option>
+                <option value="Beer">Beer</option>
+                <option value="Wiskey">Wiskey</option>
+                <option value="Wine">Wine</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => listingModel.ProductType)" />
+        </div>
 
-    <!-- Image URL field -->
-    @* <div class="mb-3">
+        <!-- Image URL field -->
+        @* <div class="mb-3">
         <label for="imageUrl">Image URL:</label>
         <InputText id="imageUrl" class="form-control" @bind-Value="listingModel.ImageUrl" />
         <ValidationMessage For="@(() => listingModel.ImageUrl)" />
     </div> *@
 
-    <button type="submit" class="btn btn-primary">Create Listing</button>
-</EditForm>
+        <button type="submit" class="btn btn-primary">Create Listing</button>
+    </EditForm>
+</div>
 
 <style>
+
+.listing-container {
+    width: 50%;
+    max-width: 50%;
+    padding: 20px;
+}
+
     .card {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.mb-3
+{
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    
+}
+.form-control, .form-select {
+    width: 50%;
+    border: 2px solid #aaa;
+    padding: 30px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
 .form-label {
     font-weight: bold;
 }
-    using Microsoft.VisualBasic;
 
 .btn-primary {
+    width: 50%;
+    font-size: 18px;
+    padding: 12px;
     background-color: #007bff;
-    border: none;
+    border-radius: 8px;
     padding: 10px;
-    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease,all background-color 0.3s ease;
 }
 
 .btn-primary:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 .form-control, .form-select {
@@ -99,7 +127,10 @@
         listingModel.CustomerID = 1; //Temporary test ID
         bool success = await dbService.AddListingAsync(listingModel);
 
-        if(success)
+        if(!success)
+        {
+            Console.WriteLine("Failed to add listing!");
+        }else
         {
             listingModel = new Product();
         }
