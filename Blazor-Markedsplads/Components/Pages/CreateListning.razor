@@ -6,7 +6,7 @@
 <h3>Create Listing</h3>
 
 <div class="listing-container">
-    <EditForm Model="@listingModel" OnValidSubmit="async () => await HandleValidSubmit()">
+    <EditForm Model="@listingModel" OnValidSubmit="@HandleValidSubmit"> @*async () => await HandleValidSubmit()*@
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -126,6 +126,9 @@
 
         listingModel.CustomerID = 1; //Temporary test ID
         bool success = await dbService.AddListingAsync(listingModel);
+
+        Console.WriteLine("HandleValidSubmit called!");
+
 
         if(!success)
         {
