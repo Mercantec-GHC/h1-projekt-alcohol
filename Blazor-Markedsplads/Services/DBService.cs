@@ -60,7 +60,7 @@ public partial class DBService
             using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
             //describtion, image_url - @describtion, @imageurl
-            string query = "INSERT INTO product (customer_id, product_name, price, product_type) VALUES (@customerId, @product_name, @price, @product_type)";
+            string query = "INSERT INTO product (customer_id, product_name, price, product_type, image_url) VALUES (@customerId, @product_name, @price, @product_type)";
 
             using var command = new NpgsqlCommand(query, connection);
 
@@ -69,7 +69,7 @@ public partial class DBService
             // command.Parameters.AddWithValue("@description", listing.Description ?? (object)DBNull.Value);
             command.Parameters.AddWithValue("@price", listing.Price);
             command.Parameters.AddWithValue("@product_type", listing.ProductType);
-            // command.Parameters.AddWithValue("@imageUrl", listing.ImageUrl);
+            // command.Parameters.AddWithValue("@image_url", listing.ImageUrl);
 
             return await command.ExecuteNonQueryAsync() > 0;
         }
