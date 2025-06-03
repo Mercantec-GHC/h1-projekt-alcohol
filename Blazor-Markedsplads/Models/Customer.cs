@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Blazor_Markedsplads.Models
-{
+//namespace Blazor_Markedsplads.Models
+
     public class Customer
     {
         public int ID { get; set; }
@@ -13,4 +13,3 @@ namespace Blazor_Markedsplads.Models
         public bool IsSeller { get; set; }
         [Required, MinLength(6)] public string? Password { get; set; }
     }
-}

@@ -43,11 +43,11 @@
     </div>
 
     <!-- Image URL field -->
-    @* <div class="mb-3">
+    <div class="mb-3">
         <label for="imageUrl">Image URL:</label>
         <InputText id="imageUrl" class="form-control" @bind-Value="listingModel.ImageUrl" />
         <ValidationMessage For="@(() => listingModel.ImageUrl)" />
-    </div> *@
+    </div>
 
     <button type="submit" class="btn btn-primary">Create Listing</button>
 </EditForm>
@@ -89,7 +89,7 @@
 
 @code {
     
-    private Product listingModel { get; set; } = new Product();
+    private ProductModel listingModel { get; set; } = new ProductModel();
 
     private async Task HandleValidSubmit()
     {
@@ -101,7 +101,7 @@
 
         if(success)
         {
-            listingModel = new Product();
+            listingModel = new ProductModel();
         }
     }
 }

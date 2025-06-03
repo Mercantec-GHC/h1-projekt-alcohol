@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-public class Product
+public class ProductModel
 {
     public int ID { get; set; }
 
@@ -20,10 +20,12 @@ public class Product
 
     [Required(ErrorMessage = "Image URL is required")]
     [StringLength(2083, ErrorMessage = "URL is too long")]  // 2083 is a common max URL length
-    // public string ImageUrl { get; set; } = string.Empty;
+    public string ImageUrl { get; set; } = string.Empty;
 
     public decimal Percent { get; set; }
     public string Nationality { get; set; } = string.Empty;
     public int Age { get; set; }
+
+    //public int? AlcoholId { get; set; } //do we need alcohol ID?
     public int CustomerID { get; set; }
 }

@@ -23,12 +23,12 @@ public partial class DBService
         }
     }
 
-    public async Task<List<Customer>> GetAllUsers()
+    public async Task<List<Customer>> GetAllUsers(string query)
     {
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            using (var command = new NpgsqlCommand("SELECT * FROM Customer", connection))
+            using (var command = new NpgsqlCommand(query, connection))
             using (var reader = await command.ExecuteReaderAsync())
             {
                 var customers = new List<Customer>();
@@ -53,7 +53,7 @@ public partial class DBService
         }
     }
 
-    public async Task<bool> AddListingAsync(Product listing)
+    public async Task<bool> AddListingAsync(ProductModel listing)
     {
         try
         {
@@ -83,9 +83,9 @@ public partial class DBService
 
     //Added ListingService into DBService, 
     // so to keep database operations in one place
-    public async Task<List<Product>> GetAllListingsAsync()
+    public async Task<List<ProductModel>> GetAllListingsAsync()
     {
-        var listings = new List<Product>();
+        var listings = new List<ProductModel>();
 
         using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync();
@@ -97,7 +97,7 @@ public partial class DBService
 
         while (await reader.ReadAsync())
         {
-            listings.Add(new Product
+            listings.Add(new ProductModel
             {
                 ID = reader.GetInt32(reader.GetOrdinal("id")),
                 ProductName = reader.GetString(reader.GetOrdinal("product_name")),
@@ -109,5 +109,34 @@ public partial class DBService
             });
         }
         return listings;
+    }
+
+
+    public int CreateProduct(ProductModel product)
+    {
+        using var connection = new NpgsqlConnection(_connectionString);
+        connection.Open();
+
+        const string sql = @"
+            INSERT INTO product
+                (product_name, price, product_type, image_url, customer_id)
+            VALUES
+                (@p_name, @p_price, @p_type, @p_image, @p_customer)
+            RETURNING id;
+        ";
+
+        using var cmd = new NpgsqlCommand(sql, connection);
+        cmd.Parameters.AddWithValue("p_name", product.ProductName);
+        cmd.Parameters.AddWithValue("p_price", product.Price);
+        cmd.Parameters.AddWithValue("p_type", product.ProductType);
+
+        if (string.IsNullOrWhiteSpace(product.ImageUrl))
+            cmd.Parameters.AddWithValue("p_image", DBNull.Value);
+        else
+            cmd.Parameters.AddWithValue("p_image", product.ImageUrl);
+
+        cmd.Parameters.AddWithValue("p_customer", product.CustomerID);
+
+        return Convert.ToInt32(cmd.ExecuteScalar());
     }
 }
