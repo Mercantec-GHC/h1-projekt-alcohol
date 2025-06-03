@@ -9,8 +9,8 @@ public class ListingService
 
         public ListingService(DBService dbService, IConfiguration configuration)
         {
-            _dbService = dbService;
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+             _dbService = dbService;
+             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         public void CreateListing(ListingModel listing)
@@ -19,7 +19,7 @@ public class ListingService
             || string.IsNullOrWhiteSpace(listing.Category)
             || listing.Price <= 0)
         {
-            throw new ArgumentException("Listing must have a Title, Category, and valid Price.");
+             throw new ArgumentException("Listing must have a Title, Category, and valid Price.");
         }
 
         var product = new ProductModel //creates Product to get its ID, using  DBService

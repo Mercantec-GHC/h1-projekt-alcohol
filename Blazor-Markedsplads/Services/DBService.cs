@@ -112,7 +112,7 @@ public partial class DBService
     }
 
 
-    public int CreateProduct(ProductModel product)
+     public int CreateProduct(ProductModel product)
     {
         using var connection = new NpgsqlConnection(_connectionString);
         connection.Open();
