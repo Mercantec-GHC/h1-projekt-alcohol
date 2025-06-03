@@ -53,14 +53,14 @@ public partial class DBService
         }
     }
 
-    public async Task<bool> AddListingAsync(Product listing)
+    public async Task<bool> AddListingAsync(ProductModel listing)
     {
         try
         {
             using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
             //describtion, image_url - @describtion, @imageurl
-            string query = "INSERT INTO product (customer_id, product_name, price, product_type) VALUES (@customerId, @product_name, @price, @product_type)";
+            string query = "INSERT INTO product (customer_id, product_name, price, product_type, image_url) VALUES (@customerId, @product_name, @price, @product_type)";
 
             using var command = new NpgsqlCommand(query, connection);
 
@@ -69,7 +69,7 @@ public partial class DBService
             // command.Parameters.AddWithValue("@description", listing.Description ?? (object)DBNull.Value);
             command.Parameters.AddWithValue("@price", listing.Price);
             command.Parameters.AddWithValue("@product_type", listing.ProductType);
-            // command.Parameters.AddWithValue("@imageUrl", listing.ImageUrl);
+            // command.Parameters.AddWithValue("@image_url", listing.ImageUrl);
 
             return await command.ExecuteNonQueryAsync() > 0;
         }
@@ -83,9 +83,9 @@ public partial class DBService
 
     //Added ListingService into DBService, 
     // so to keep database operations in one place
-    public async Task<List<Product>> GetAllListingsAsync()
+    public async Task<List<ProductModel>> GetAllListingsAsync()
     {
-        var listings = new List<Product>();
+        var listings = new List<ProductModel>();
 
         using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync();
@@ -97,7 +97,7 @@ public partial class DBService
 
         while (await reader.ReadAsync())
         {
-            listings.Add(new Product
+            listings.Add(new ProductModel
             {
                 ID = reader.GetInt32(reader.GetOrdinal("id")),
                 ProductName = reader.GetString(reader.GetOrdinal("product_name")),

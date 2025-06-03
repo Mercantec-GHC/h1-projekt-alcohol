@@ -10,9 +10,9 @@ public class ListingService
     {
          _connectionString = configuration.GetConnectionString("DefaultConnection");
     }
-    private readonly List<Product> listings = new List<Product>();
+    private readonly List<ProductModel> listings = new List<ProductModel>();
 
-    public void AddListing(Product item)
+    public void AddListing(ProductModel item)
     {
         listings.Add(item);
     }

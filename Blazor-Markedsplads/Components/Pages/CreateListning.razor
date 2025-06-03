@@ -117,7 +117,7 @@
 
 @code {
     
-    private Product listingModel { get; set; } = new Product();
+    private ProductModel listingModel { get; set; } = new ProductModel();
 
     private async Task HandleValidSubmit()
     {
@@ -135,7 +135,7 @@
             Console.WriteLine("Failed to add listing!");
         }else
         {
-            listingModel = new Product();
+            listingModel = new ProductModel();
         }
     }
 }
