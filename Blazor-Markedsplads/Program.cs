@@ -1,4 +1,6 @@
 using Blazor_Markedsplads.Components;
+using Blazor_Markedsplads.Services;
+using Blazor_Markedsplads.Models;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<DBService>();
 builder.Services.AddScoped<ListingService>();
+builder.Services.AddScoped<CustomerService>();
 
 var app = builder.Build();
 
