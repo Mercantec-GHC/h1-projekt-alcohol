@@ -1,7 +1,7 @@
 ﻿@page "/register"
 @using Blazor_Markedsplads.Models
 @using Blazor_Markedsplads.Services
-@* @rendermode InteractiveServer *@
+ @rendermode InteractiveServer
 
 @inject CustomerService CustomerService
 @inject NavigationManager Navigation
@@ -9,7 +9,7 @@
 
 <h3>User Registration</h3>
 
-<EditForm Model="newCustomer" OnValidSubmit="HandleRegister" FormName="RegisterForm">
+<EditForm Model="newCustomer" OnValidSubmit="HandleRegister" >
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -42,7 +42,7 @@
         <InputText id="password" type="password" class="form-control" @bind-Value="newCustomer.Password" placeholder="Enter a password" />
     </div>
 
-     <button type="submit" form="RegisterForm" class="btn btn-primary"> Register</button>
+     <button type="submit" class="btn btn-primary"> Register</button>
 </EditForm>
 
 @if (!string.IsNullOrEmpty(message))
@@ -63,7 +63,7 @@
 
             message = $"Registration successful (ID = {createdId}). Redirecting to login…";
             await Task.Delay(1500);
-            Navigation.NavigateTo("/login");
+          //  Navigation.NavigateTo("/login"); // add again when login wqill be created
         }
         catch (Exception ex)
         {

@@ -5,12 +5,15 @@ namespace Blazor_Markedsplads.Services
 
     public class CustomerService
     {
+        private readonly DBService _dbService;
         private readonly string _connectionString;
 
-        public CustomerService(IConfiguration configuration)
+        public CustomerService(DBService dbService, IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection")!;
+            _dbService = dbService;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+
 
 
         // Add user to customer table in db and returns its ID
@@ -29,7 +32,7 @@ namespace Blazor_Markedsplads.Services
 
             const string sql = @"
                 INSERT INTO customer 
-                    (name, email, age, address, phone, is_seller, password)
+                    (name, email, age, address, phone, isseller, password)
                 VALUES 
                     (@name, @email, @age, @address, @phone, @isSeller, @password)
                 RETURNING id;
@@ -67,7 +70,7 @@ namespace Blazor_Markedsplads.Services
                     age       = @age,
                     address   = @address,
                     phone     = @phone,
-                    is_seller = @isSeller,
+                    isseller = @isSeller,
                     password  = @password
                 WHERE 
                     id = @id;
