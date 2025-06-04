@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Blazor_Markedsplads.Services
 @rendermode InteractiveServer
 @inject DBService DBService 
 
@@ -143,7 +144,7 @@ font-weight: bold;
 <p>@(isConnected ? "Connected to the database" : "Not connected to the database")</p>
 
 @code {
-    List<Customer> customers = new List<Customer>();
+    List<CustomerModel> customers = new List<CustomerModel>();
 
     public async Task GetUsers()// will not use in final program
     {

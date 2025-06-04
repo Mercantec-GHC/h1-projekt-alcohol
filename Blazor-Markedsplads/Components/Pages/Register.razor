@@ -1,10 +1,15 @@
 ﻿@page "/register"
 @using Blazor_Markedsplads.Models
+@using Blazor_Markedsplads.Services
+ @rendermode InteractiveServer
+
+@inject CustomerService CustomerService
 @inject NavigationManager Navigation
+
 
 <h3>User Registration</h3>
 
-<EditForm Model="newCustomer" OnValidSubmit="HandleRegister">
+<EditForm Model="newCustomer" OnValidSubmit="HandleRegister" >
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -37,22 +42,32 @@
         <InputText id="password" type="password" class="form-control" @bind-Value="newCustomer.Password" placeholder="Enter a password" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Register</button>
+     <button type="submit" class="btn btn-primary"> Register</button>
 </EditForm>
 
-@code {
-    private Customer newCustomer = new();
-
-    private void HandleRegister()
-    {
-        // TODO: Inject a service (e.g., ICustomerService) to save to the database
-        // Password hashing and persistence handled in data layer
-
-        // Example stub for future data layer:
-        // await CustomerService.CreateAsync(newCustomer);
-
-        // Navigate to login or confirmation page
-        Navigation.NavigateTo("/login");
-    }
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info mt-3">@message</div>
 }
 
+@code {
+    private CustomerModel newCustomer = new();
+    private string message = string.Empty;
+
+    private async Task HandleRegister()
+    {
+        try
+        {
+           
+            int createdId = await CustomerService.CreateCustomerAsync(newCustomer);
+
+            message = $"Registration successful (ID = {createdId}). Redirecting to login…";
+            await Task.Delay(1500);
+          //  Navigation.NavigateTo("/login"); // add again when login wqill be created
+        }
+        catch (Exception ex)
+        {
+            message = $"Error: {ex.Message}";
+        }
+    }
+}
