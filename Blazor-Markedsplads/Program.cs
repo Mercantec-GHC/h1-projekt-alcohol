@@ -14,6 +14,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped<DBService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<LoginService>();
 
 var app = builder.Build();
 
