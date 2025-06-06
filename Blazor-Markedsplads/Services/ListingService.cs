@@ -27,6 +27,10 @@ public class ListingService
             ProductName = listing.Title,
             Price = listing.Price,
             ProductType = listing.Category,
+            // Description = listing.Description,
+            // Nationality = listing.Nationality,
+            // Percent = listing.Percent,
+            // Age = listing.age,
             ImageUrl = listing.ImageUrl,
             CustomerID = listing.CustomerId
         };

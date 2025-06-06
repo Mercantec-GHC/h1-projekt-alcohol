@@ -1,4 +1,6 @@
-﻿    public class ListingModel
+﻿using Microsoft.AspNetCore.SignalR;
+
+public class ListingModel
 
 {
     public string Title { get; set; } = string.Empty;       
@@ -7,6 +9,10 @@
     public string Category { get; set; } = string.Empty;
     public string? ImageUrl { get; set; }
 
+
+    // public string? Nationality { get; set; }
+    // public decimal Percent { get; set; }
+    // public int? age { get; set; }
     public int ProductId { get; set; }                      
     public int CustomerId { get; set; }                       
 }
