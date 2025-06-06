@@ -24,15 +24,19 @@ namespace Blazor_Markedsplads.Services
                 throw new ArgumentException("Listing must have a Title, Category, and valid Price.");
             }
 
-            var product = new ProductModel //creates Product to get its ID, using  DBService
-            {
-                ProductName = listing.Title,
-                Price = listing.Price,
-                ProductType = listing.Category,
-                ImageUrl = listing.ImageUrl,
-                CustomerID = listing.CustomerId
-            };
-            int newProductId = _dbService.CreateProduct(product);
+        var product = new ProductModel //creates Product to get its ID, using  DBService
+        {
+            ProductName = listing.Title,
+            Price = listing.Price,
+            ProductType = listing.Category,
+            // Description = listing.Description,
+            // Nationality = listing.Nationality,
+            // Percent = listing.Percent,
+            // Age = listing.age,
+            ImageUrl = listing.ImageUrl,
+            CustomerID = listing.CustomerId
+        };
+        int newProductId = _dbService.CreateProduct(product);
 
             using var connection = new NpgsqlConnection(_connectionString);//new item in listing table with product id
             connection.Open();
