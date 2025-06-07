@@ -4,10 +4,10 @@
 @inject ListingService listingService
 @inject DBService dbService
 
-<h3>Create Listing</h3>
+<h3 class="Title">Create Listing</h3>
 
 <div class="listing-container">
-    <EditForm Model="@listingModel" OnValidSubmit="async () => await HandleValidSubmit()"> @*async () => await HandleValidSubmit()*@
+    <EditForm Model="@listingModel" OnValidSubmit="async () => await HandleValidSubmit()">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -73,11 +73,25 @@
 </div>
 
 <style>
+.Title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        border-radius: 50px;
+        @*Makes border more circuler*@
+        border: 1px solid black;
+        background-color: antiquewhite;
+        width: 500px;
 
+    }
 .listing-container {
-    width: 50%;
+    background-color: antiquewhite;;
+    width: 100%;
     max-width: 50%;
     padding: 20px;
+    border-radius: 10px;
+    border: 1px solid black;
 }
 
     .card {

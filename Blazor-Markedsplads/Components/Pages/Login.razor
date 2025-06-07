@@ -2,7 +2,7 @@
 @using Blazor_Markedsplads.Models
 @inject NavigationManager Navigation
 
-<h3>User Login</h3>
+<h3 class="Title">User Login</h3>
 
 <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
     <DataAnnotationsValidator />
@@ -19,6 +19,21 @@
 
     <button type="submit" class="btn btn-primary">Login</button>
 </EditForm>
+
+<style>
+    .Title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        border-radius: 50px;
+        @*Makes border more circuler*@
+        border: 1px solid black;
+        background-color: antiquewhite;
+        width: 500px;
+
+    }
+</style>
 
 @code {
     private LoginModel loginModel = new();

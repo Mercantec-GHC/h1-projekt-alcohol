@@ -41,78 +41,94 @@
 </div>
 
 <style>
+     .MainWrapper {
+        display: flex;
+        flex-direction: column;
+        /* Stack elements vertically */
+        align-items: center;
+        /* Center everything horizontally */
+        justify-content: center;
+        /* Adjust vertical spacing */
+        width: 100%;
+        position: relative;
+    }
 
-.MainWrapper {
-    display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center; /* Center everything horizontally */
-    justify-content: center; /* Adjust vertical spacing */
-    width: 100%;
-    position: relative;
-}
+    .Title_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+        border-radius: 50px;
+        @*Makes border more circuler*@
+        border: 1px solid black;
+        background-color: antiquewhite;
+        width: 650px;
 
- .Title_container{
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    padding: 50px;
-    border-radius: 50px; @*Makes border more circuler*@
-    border: 1px solid black;
-    background-color: antiquewhite;
-    width: 650px;
+        position: absolute;
+        /* Positions the element relative to the viewport */
+        top: 10%;
+        /* Moves it halfway down the viewport */
+        left: 57%;
+        /* Moves it halfway across the viewport */
+        transform: translateX(-50%);
 
-    position: absolute;/* Positions the element relative to the viewport */
-    top: 10%; /* Moves it halfway down the viewport */
-    left: 57%; /* Moves it halfway across the viewport */
-    transform: translateX(-50%);
+        background-size: cover;
+        /* Ensures the image fills the container */
+        background-position: center;
+        /* Centers the image */
+        background-repeat: no-repeat;
+        /* Prevents the image from repeating */
 
-    background-size: cover; /* Ensures the image fills the container */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    
-} 
+    }
 
-.frontpage_lable{
-    font-size: 180%;
-    font-weight: bold;
-}
+    .frontpage_lable {
+        font-size: 180%;
+        font-weight: bold;
+    }
 
-.AboutUs_lable{
-font-weight: bold;
-}
+    .AboutUs_lable {
+        font-weight: bold;
+    }
 
-.About_container{
-     display: flex;
-    flex-direction: column; /* Stack children vertically */
-    justify-content: flex-start;
-    align-items: center;
-    padding: 50px;
-    border-radius: 50px;
-    border: 1px solid black;
-    background-color: antiquewhite;
-    width: 650px; /* Match Title Container */
-    
-    position: absolute; /* Keeps it in place */
-    top: 30%; /* Adjust lower on the page */
-    left: 57%;
-    transform: translateX(-50%);
-}
+    .About_container {
+        display: flex;
+        flex-direction: column;
+        /* Stack children vertically */
+        justify-content: flex-start;
+        align-items: center;
+        padding: 50px;
+        border-radius: 50px;
+        border: 1px solid black;
+        background-color: antiquewhite;
+        width: 650px;
+        /* Match Title Container */
 
-.Text_container {
-    width: 90%; /* Avoid shrinking */
-    padding: 20px;
-    text-align: center;
-    font-size: 120%;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    line-height: 1.8; /* Controls the height of each line */
-}
-.Customer_Container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
+        position: absolute;
+        /* Keeps it in place */
+        top: 30%;
+        /* Adjust lower on the page */
+        left: 57%;
+        transform: translateX(-50%);
+    }
+
+    .Text_container {
+        width: 90%;
+        /* Avoid shrinking */
+        padding: 20px;
+        text-align: center;
+        font-size: 120%;
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        line-height: 1.8;
+        /* Controls the height of each line */
+    }
+
+    .Customer_Container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
 
     .Customer_Box {
         width: 250px;
@@ -132,7 +148,8 @@ font-weight: bold;
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background-color: #3498db; /* Change color if needed */
+        background-color: #3498db;
+        /* Change color if needed */
         display: block;
         margin: 0 auto 10px;
     }
