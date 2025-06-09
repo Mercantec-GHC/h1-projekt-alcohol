@@ -1,0 +1,167 @@
+@* @namespace PopUp.Components
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+
+@if (ShowPopup)
+{
+    <div class="popup-overlay">
+        <div class="popup-content">
+            <h4>Are you 18 or older?</h4>
+            <button class="btn btn-primary me-2" @onclick="() => Confirm(true)">Yes</button>
+            <button class="btn btn-secondary" @onclick="() => Confirm(false)">No</button>
+        </div>
+    </div>
+}
+
+<style>
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 80px;
+        border-radius: 10px;
+        text-align: center;
+    }
+</style>
+
+@code {
+    private bool ShowPopup = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        // Check localStorage for age confirmation status
+        var stored = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "isOver18");
+
+        // Show popup only if the user hasn't confirmed age before
+        ShowPopup = stored != "true";
+        StateHasChanged();
+    }
+
+    private async Task Confirm(bool over18)
+    {
+        // Store the user's response in localStorage
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "isOver18", over18.ToString().ToLower());
+
+        if (over18)
+        {
+            // If user confirms 18+, close popup
+            ShowPopup = false;
+            StateHasChanged();
+        }
+        else
+        {
+            // If user selects "No," keep the popup open
+            ShowPopup = true;
+        }
+    }
+} *@
+
+
+@page "/PopUp"
+@rendermode InteractiveServer
+@namespace PopUp.Components
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+
+
+@if (ShowAgeVerification)
+{
+    <div class="popup-overlay">
+        <div class="popup-content">
+            <p><strong>Age verification police here!</strong></p>
+            <p><strong>Are you over 18?</strong></p>
+            <button class="btn btn-primary me-2" @onclick="() => Confirm(true)">18 Or Over</button>
+            <button class="btn btn-secondary" @onclick="() => Confirm(false)">Under 18</button>
+        </div>
+    </div>
+}
+@if(ShowSecondPopUp)
+{
+    <div class="popup-overlay">
+        <div class="popup-content">
+            <p><strong>Sorry, access is restricted for users under 18.</strong></p>
+            <p>Please come back when you're older!</p>
+            <button class="btn btn-secondary" @onclick="GoBack">Back</button>
+
+        </div>
+    </div>
+}
+
+<style>
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 80px;
+        border-radius: 10px;
+        text-align: center;
+    }
+</style>
+
+@code {
+
+    //here should be some property
+    private bool ShowAgeVerification = false;
+    private bool ShowSecondPopUp = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+
+        var stored = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "isOver18");
+
+        @*ShowGate = stored != "true"; *@
+        ShowAgeVerification = true;
+        ShowSecondPopUp = false;
+        StateHasChanged();
+    }
+
+    private async Task Confirm(bool over18)
+    {
+
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "isOver18", over18.ToString().ToLower());
+        if (over18)
+        {
+            ShowAgeVerification = false;
+            StateHasChanged();
+        }
+        else
+        {
+            ShowAgeVerification = false;
+            ShowSecondPopUp = true;
+        }
+    }
+
+    private void GoBack(){
+        ShowSecondPopUp = false;
+        ShowAgeVerification = true;
+        StateHasChanged();
+    }
+} 

@@ -2,6 +2,7 @@
 @using Blazor_Markedsplads.Services
 @rendermode InteractiveServer
 @inject DBService DBService 
+@using PopUp.Components
 
 <div class="MainpageWrapper">
     <div class="Title_container">
@@ -39,6 +40,9 @@
         }
     </div>
 </div>
+
+<PopUp />
+
 
 <style>
      .MainWrapper {
