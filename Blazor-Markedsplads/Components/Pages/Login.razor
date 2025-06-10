@@ -1,6 +1,13 @@
 ﻿@page "/login"
 @using Blazor_Markedsplads.Models
 @inject NavigationManager Navigation
+@using Blazor_Markedsplads.Services
+
+
+@rendermode InteractiveServer
+@inject LoginService loginService
+
+
 
 <h3 class="Title">User Login</h3>
 
@@ -18,7 +25,13 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Login</button>
+   
 </EditForm>
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3">@errorMessage</div>
+}
+
 
 <style>
     .Title{
@@ -37,23 +50,20 @@
 
 @code {
     private LoginModel loginModel = new();
+    private string errorMessage = string.Empty;
 
-    private void HandleLogin()
+    private async Task HandleLogin()
     {
-        // TODO: Inject a service (e.g., IAuthService) to verify credentials against the database
-        // Example stub:
-        // var user = await AuthService.ValidateUserAsync(loginModel.Email, loginModel.Password);
-        // if (user != null)
-        // {
-        //     // On success, redirect or set auth state
-        //     Navigation.NavigateTo("/");
-        // }
-        // else
-        // {
-        //     // Show error (e.g., invalid credentials)
-        // }
+        errorMessage = string.Empty;
 
-        // Temporary navigation for testing:
+        
+        var (IsValid, IsSeller) = await loginService.ValidateLoginAsync(loginModel.Email, loginModel.Password!);
+
+      if (!IsValid)
+        {
+            errorMessage = "Invalid email or password.";
+            return;
+        }
         Navigation.NavigateTo("/");
     }
 }
