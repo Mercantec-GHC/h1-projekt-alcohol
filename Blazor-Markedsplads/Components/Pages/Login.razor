@@ -1,15 +1,16 @@
 ﻿@page "/login"
 @using Blazor_Markedsplads.Models
-@inject NavigationManager Navigation
+
 @using Blazor_Markedsplads.Services
 
 
 @rendermode InteractiveServer
 @inject LoginService loginService
+@inject SessionService SessionService
+@inject NavigationManager Navigation
 
 
-
-<h3>User Login</h3>
+<h3>Customer Login</h3>
 
 <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
     <DataAnnotationsValidator />
@@ -24,7 +25,7 @@
         <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Password" placeholder="Enter your password" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Login</button>
+    <button type="submit" class="btn btn-primary" style="margin-top:18px;">Login</button>
    
 </EditForm>
 @if (!string.IsNullOrEmpty(errorMessage))
@@ -41,14 +42,16 @@
     {
         errorMessage = string.Empty;
 
-        
-        var (IsValid, IsSeller) = await loginService.ValidateLoginAsync(loginModel.Email, loginModel.Password!);
+        var customer = await loginService.ValidateLoginAsync(loginModel.Email, loginModel.Password);
 
-      if (!IsValid)
+        if (customer == null)
         {
             errorMessage = "Invalid email or password.";
             return;
         }
+
+        SessionService.Login(customer);
+
         Navigation.NavigateTo("/");
     }
 }

@@ -17,7 +17,7 @@ public class CustomerModel
 
     public string? Address { get; set; }
     public int Phone { get; set; }
-    public bool IsSeller { get; set; }
+    //public bool IsSeller { get; set; }
 
     [Required, MinLength(6)]
     public string? Password { get; set; }

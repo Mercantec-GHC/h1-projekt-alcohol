@@ -1,0 +1,80 @@
+﻿@page "/cart"
+@using Blazor_Markedsplads.Models
+@using Blazor_Markedsplads.Services
+@inject CartService CartService
+@inject SessionService SessionService
+@inject NavigationManager Navigation
+ @rendermode InteractiveServer
+
+<h3>Your Cart</h3>
+
+@if (!CartService.GetItems().Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    @foreach (var group in CartService.GetItems().GroupBy(i => i.SellerName))
+    {
+        <div class="mb-4">
+            <h5>Seller: @group.Key (@group.First().SellerPhone)</h5>
+            <table class="table">
+                <thead>
+                    <tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in group)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.Price.ToString("C", new System.Globalization.CultureInfo("da-DK"))</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.TotalPrice.ToString("C", new System.Globalization.CultureInfo("da-DK"))</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger"
+                                        @onclick="() => Remove(item.ID)">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+                        <td colspan="2">@group.Sum(x => x.TotalPrice).ToString("C", new System.Globalization.CultureInfo("da-DK"))</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+
+    <h5>Grand Total: @CartService.GrandTotal.ToString("C", new System.Globalization.CultureInfo("da-DK"))</h5>
+    <button class="btn btn-secondary" @onclick="ClearCart">Clear Cart</button>
+
+    <div class="alert alert-info mt-4">
+        To complete your order, please <strong>contact each seller</strong> using above phone numbers.
+    </div>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+      
+        CartService.OnChange += OnCartChangedAsync;
+    }
+
+
+    public void Dispose()
+    {
+        CartService.OnChange -= OnCartChangedAsync;
+    }
+
+    private Task OnCartChangedAsync()
+    {
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private void Remove(int productId) => CartService.RemoveFromCartAsync(productId);
+    private void ClearCart() => CartService.ClearCartAsync();
+}

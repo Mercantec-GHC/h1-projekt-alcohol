@@ -3,6 +3,9 @@
 @rendermode InteractiveServer
 @inject ListingService listingService
 @inject DBService dbService
+@inject SessionService SessionService
+@inject NavigationManager Navigation
+
 
 <h3>Create Listing</h3>
 
@@ -145,8 +148,9 @@
         listingModel.CustomerID = 1; //Temporary test ID
         bool success = await dbService.AddListingAsync(listingModel);
 
-        Console.WriteLine("HandleValidSubmit called!");
 
+        Console.WriteLine("HandleValidSubmit called!");
+     
 
         if(!success)
         {
@@ -156,4 +160,16 @@
             listingModel = new ProductModel();
         }
     }
+    private bool _redirected = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !SessionService.IsLoggedIn && !_redirected)
+        {
+            _redirected = true;
+            Navigation.NavigateTo("/login");
+        }
+    }
 }
+
+

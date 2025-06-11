@@ -32,9 +32,9 @@ namespace Blazor_Markedsplads.Services
 
             const string sql = @"
                 INSERT INTO customer 
-                    (name, email, age, address, phone, isseller, password)
+                    (name, email, age, address, phone, password)
                 VALUES 
-                    (@name, @email, @age, @address, @phone, @isSeller, @password)
+                    (@name, @email, @age, @address, @phone, @password)
                 RETURNING id;
             ";
 
@@ -47,7 +47,7 @@ namespace Blazor_Markedsplads.Services
                     ? (object)DBNull.Value
                     : customer.Address);
             cmd.Parameters.AddWithValue("phone", customer.Phone);
-            cmd.Parameters.AddWithValue("isSeller", customer.IsSeller);
+           // cmd.Parameters.AddWithValue("isSeller", customer.IsSeller);
             cmd.Parameters.AddWithValue("password", customer.Password);
 
             int newId = Convert.ToInt32(await cmd.ExecuteScalarAsync());
@@ -70,7 +70,7 @@ namespace Blazor_Markedsplads.Services
                     age       = @age,
                     address   = @address,
                     phone     = @phone,
-                    isseller = @isSeller,
+
                     password  = @password
                 WHERE 
                     id = @id;
@@ -86,7 +86,7 @@ namespace Blazor_Markedsplads.Services
                     ? (object)DBNull.Value
                     : customer.Address);
             cmd.Parameters.AddWithValue("phone", customer.Phone);
-            cmd.Parameters.AddWithValue("isSeller", customer.IsSeller);
+          //  cmd.Parameters.AddWithValue("isSeller", customer.IsSeller);
             cmd.Parameters.AddWithValue("password", customer.Password);
 
             int affected = await cmd.ExecuteNonQueryAsync();

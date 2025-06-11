@@ -21,7 +21,7 @@
             If you’re over 18, we warmly invite you to join us - let’s explore the taste of life together!</div>
     </div>
 
-    <button @onclick="GetUsers">Get Users</button>
+   @*  <button @onclick="GetUsers">Get Users</button> *@
     <div class="Customer_Container">
         @foreach (var customer in customers)
         {
@@ -39,8 +39,9 @@
         }
     </div>
 </div>
-
+<PopUp />
 <style>
+
 
 .MainWrapper {
     display: flex;
@@ -140,7 +141,7 @@ font-weight: bold;
 
 
 @*Ternary:*@
-<p>@(isConnected ? "Connected to the database" : "Not connected to the database")</p>
+@* <p>@(isConnected ? "Connected to the database" : "Not connected to the database")</p> *@
 
 @code {
     List<CustomerModel> customers = new List<CustomerModel>();

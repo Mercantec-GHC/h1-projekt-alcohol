@@ -29,10 +29,10 @@ namespace Blazor_Markedsplads.Services
             ProductName = listing.Title,
             Price = listing.Price,
             ProductType = listing.Category,
-            // Description = listing.Description,
-            // Nationality = listing.Nationality,
-            // Percent = listing.Percent,
-            // Age = listing.age,
+//Description = listing.Description,
+            Nationality = listing.Nationality,
+            Percent = listing.Percent,
+            Age = listing.Age,
             ImageUrl = listing.ImageUrl,
             CustomerID = listing.CustomerId
         };
@@ -53,7 +53,7 @@ namespace Blazor_Markedsplads.Services
 
                 using var cmdList = new NpgsqlCommand(insertListingSql, connection, transaction);
                 cmdList.Parameters.AddWithValue("l_title", listing.Title);
-                cmdList.Parameters.AddWithValue("l_desc", (object?)listing.Description ?? DBNull.Value);
+              //  cmdList.Parameters.AddWithValue("l_desc", (object?)listing.Description ?? DBNull.Value);
                 cmdList.Parameters.AddWithValue("l_price", listing.Price);
                 cmdList.Parameters.AddWithValue("l_cat", listing.Category);
 
