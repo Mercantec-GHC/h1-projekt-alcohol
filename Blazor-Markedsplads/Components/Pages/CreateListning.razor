@@ -1,16 +1,17 @@
 ﻿@page "/create-listing"
 @using Blazor_Markedsplads.Services
 @rendermode InteractiveServer
+@inject ProtectedSessionStorage SessionStorage
 @inject ListingService listingService
 @inject DBService dbService
 @inject SessionService SessionService
 @inject NavigationManager Navigation
+@inject CustomerService customerService
 
-
-<h3>Create Listing</h3>
+<h3 class="Title">Create Listing</h3>
 
 <div class="listing-container">
-    <EditForm Model="@listingModel" OnValidSubmit="async () => await HandleValidSubmit()"> @*async () => await HandleValidSubmit()*@
+    <EditForm Model="@listingModel" OnValidSubmit="async () => await HandleValidSubmit()">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -72,15 +73,33 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Create Listing</button>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
     </EditForm>
 </div>
 
 <style>
+.Title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        border-radius: 50px;
+        @*Makes border more circuler*@
+        border: 1px solid black;
+        background-color: antiquewhite;
+        width: 500px;
 
+    }
 .listing-container {
-    width: 50%;
+    background-color: antiquewhite;;
+    width: 100%;
     max-width: 50%;
     padding: 20px;
+    border-radius: 10px;
+    border: 1px solid black;
 }
 
     .card {
@@ -139,18 +158,26 @@
 @code {
     
     private ProductModel listingModel { get; set; } = new ProductModel();
-
+    private string? errorMessage;
     private async Task HandleValidSubmit()
+{
+    var emailResult = await SessionStorage.GetAsync<string>("UserEmail");
+    var userEmail = emailResult.Success ? emailResult.Value : null;
+
+    if (!string.IsNullOrEmpty(userEmail))
     {
-        //Cannot check for customer, as login and register system is not yet setup.
-        @* listingModel.CustomerID = currentUserID; *@
+        errorMessage = "You must be logged in to create a listing!";
+        Console.WriteLine(errorMessage); // Debugging check
+        var user = await customerService.GetCustomerByEmailAsync(userEmail); // ✅ Get actual logged-in user
+        listingModel.CustomerID = user.ID; // ✅ Assign the correct customer_id to the listing
+    }
+    else
+    {
+        Console.WriteLine("Error: No logged-in user found.");
+        return;
+    }
 
-        listingModel.CustomerID = 1; //Temporary test ID
-        bool success = await dbService.AddListingAsync(listingModel);
-
-
-        Console.WriteLine("HandleValidSubmit called!");
-     
+    bool success = await dbService.AddListingAsync(listingModel); // ✅ Store listing in DB
 
         if(!success)
         {

@@ -1,14 +1,13 @@
 ﻿@page "/register"
 @using Blazor_Markedsplads.Models
 @using Blazor_Markedsplads.Services
- @rendermode InteractiveServer
-
+@rendermode InteractiveServer
 @inject CustomerService CustomerService
 @inject NavigationManager Navigation
+@inject ProtectedSessionStorage SessionStorage
 @inject SessionService SessionService
 
-
-<h3>User Registration</h3>
+<h3 class="Title">User Registration</h3>
 
 <EditForm Model="newCustomer" OnValidSubmit="HandleRegister" >
     <DataAnnotationsValidator />
@@ -34,10 +33,7 @@
         <label for="phone">Phone</label>
         <InputNumber id="phone" class="form-control" @bind-Value="newCustomer.Phone" placeholder="Enter your phone number" />
     </div>
-    @* <div class="form-group form-check">
-        <InputCheckbox id="isSeller" class="form-check-input" @bind-Value="newCustomer.IsSeller" />
-        <label class="form-check-label" for="isSeller">Is Seller?</label>
-    </div> *@
+   
     <div class="form-group">
         <label for="password">Password</label>
         <InputText id="password" type="password" class="form-control" @bind-Value="newCustomer.Password" placeholder="Enter a password" />
@@ -50,6 +46,21 @@
 {
     <div class="alert alert-info mt-3">@message</div>
 }
+
+<style>
+    .Title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        border-radius: 50px;
+        @*Makes border more circuler*@
+        border: 1px solid black;
+        background-color: antiquewhite;
+        width: 500px;
+
+    }
+</style>
 
 @code {
     private CustomerModel newCustomer = new();

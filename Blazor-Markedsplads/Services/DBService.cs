@@ -94,9 +94,9 @@ namespace Blazor_Markedsplads.Services
 
             using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
-
-            string query = "SELECT * FROM product";
-
+ 
+            string query = "SELECT p.id, p.product_name, p.price, p.product_type, p.nationality, p.age, p.percent, p.image_url, p.customer_id, c.name AS seller_name FROM product p INNER JOIN customer c ON p.customer_id = c.id";
+ 
             using var command = new NpgsqlCommand(query, connection);
             using var reader = await command.ExecuteReaderAsync();
 
@@ -106,14 +106,15 @@ namespace Blazor_Markedsplads.Services
                 {
                     ID = reader.GetInt32(reader.GetOrdinal("id")),
                     ProductName = reader.GetString(reader.GetOrdinal("product_name")),
-                 //   Description = reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString(reader.GetOrdinal("description")),
+                    // Description = reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString(reader.GetOrdinal("description")),
                     Price = reader.GetDecimal(reader.GetOrdinal("price")),
                     ProductType = reader.GetString(reader.GetOrdinal("product_type")),
                     ImageUrl = reader.GetString(reader.GetOrdinal("image_url")),
                     CustomerID = reader.GetInt32(reader.GetOrdinal("customer_id")),
                     Nationality = reader.IsDBNull(reader.GetOrdinal("nationality")) ? null : reader.GetString(reader.GetOrdinal("nationality")),
                     Percent = reader.GetDecimal(reader.GetOrdinal("percent")),
-                    Age = reader.IsDBNull(reader.GetOrdinal("age")) ? null : reader.GetInt32(reader.GetOrdinal("age"))
+                    Age = reader.IsDBNull(reader.GetOrdinal("age")) ? null : reader.GetInt32(reader.GetOrdinal("age")),
+                    SellerName = reader.GetString(reader.GetOrdinal("seller_name"))
                 });
             }
             return listings;

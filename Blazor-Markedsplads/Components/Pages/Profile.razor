@@ -1,0 +1,53 @@
+@page "/Profile"
+@rendermode InteractiveServer
+@namespace Profile.Pages
+@inject ProtectedSessionStorage SessionStorage
+@inject NavigationManager Navigation
+@inject CustomerService CustomerService
+
+@if (customerModel != null)
+{
+    <h1>Welcome, @customerModel.Name!</h1>
+    <p>Email: @customerModel.Email</p>
+    <p>Address: @customerModel.Address</p>
+    <p>Age: @customerModel.Age</p>
+    <button @onclick="Logout">Logout</button>
+}
+else
+{
+    <h1>Please log in to view your profile.</h1>
+    <a href="/login" class="btn btn-primary">Go to Login</a>
+}
+
+@code {
+    private CustomerModel? customerModel;
+    private string? userEmail;
+    private bool isFirstRender = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var emailResult = await SessionStorage.GetAsync<string>("UserEmail");
+            userEmail = emailResult.Success ? emailResult.Value : null;
+
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                Navigation.NavigateTo("/login");
+                return;
+            }
+
+            // Fetch user details using email
+            customerModel = await CustomerService.GetCustomerByEmailAsync(userEmail);
+
+            isFirstRender = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task Logout()
+    {
+        await SessionStorage.DeleteAsync("UserEmail");
+        Navigation.NavigateTo("/login");
+    }
+}

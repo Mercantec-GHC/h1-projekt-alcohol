@@ -1,5 +1,6 @@
 using Blazor_Markedsplads.Components;
 using Blazor_Markedsplads.Services;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Blazor_Markedsplads.Models;
 using Npgsql;
 
@@ -8,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 
 builder.Services.AddScoped<DBService>();
 builder.Services.AddScoped<ListingService>();
@@ -34,5 +38,6 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
 
 app.Run();

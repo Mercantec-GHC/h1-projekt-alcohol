@@ -2,6 +2,7 @@
 @using Blazor_Markedsplads.Models
 
 @using Blazor_Markedsplads.Services
+@inject ProtectedSessionStorage SessionStorage 
 
 
 @rendermode InteractiveServer
@@ -34,6 +35,21 @@
 }
 
 
+<style>
+    .Title{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        border-radius: 50px;
+        @*Makes border more circuler*@
+        border: 1px solid black;
+        background-color: antiquewhite;
+        width: 500px;
+
+    }
+</style>
+
 @code {
     private LoginModel loginModel = new();
     private string errorMessage = string.Empty;
@@ -53,5 +69,6 @@
         SessionService.Login(customer);
 
         Navigation.NavigateTo("/");
+        StateHasChanged();
     }
 }
