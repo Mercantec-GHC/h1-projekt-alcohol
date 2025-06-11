@@ -1,8 +1,10 @@
 ﻿@page "/create-listing"
 @using Blazor_Markedsplads.Services
 @rendermode InteractiveServer
+@inject ProtectedSessionStorage SessionStorage
 @inject ListingService listingService
 @inject DBService dbService
+@inject CustomerService customerService
 
 <h3 class="Title">Create Listing</h3>
 
@@ -69,6 +71,10 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Create Listing</button>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
     </EditForm>
 </div>
 
@@ -150,24 +156,35 @@
 @code {
     
     private ProductModel listingModel { get; set; } = new ProductModel();
-
+    private string? errorMessage;
     private async Task HandleValidSubmit()
+{
+    var emailResult = await SessionStorage.GetAsync<string>("UserEmail");
+    var userEmail = emailResult.Success ? emailResult.Value : null;
+
+    if (!string.IsNullOrEmpty(userEmail))
     {
-        //Cannot check for customer, as login and register system is not yet setup.
-        @* listingModel.CustomerID = currentUserID; *@
-
-        listingModel.CustomerID = 1; //Temporary test ID
-        bool success = await dbService.AddListingAsync(listingModel);
-
-        Console.WriteLine("HandleValidSubmit called!");
-
-
-        if(!success)
-        {
-            Console.WriteLine("Failed to add listing!");
-        }else
-        {
-            listingModel = new ProductModel();
-        }
+        errorMessage = "You must be logged in to create a listing!";
+        Console.WriteLine(errorMessage); // Debugging check
+        var user = await customerService.GetCustomerByEmailAsync(userEmail); // ✅ Get actual logged-in user
+        listingModel.CustomerID = user.ID; // ✅ Assign the correct customer_id to the listing
     }
+    else
+    {
+        Console.WriteLine("Error: No logged-in user found.");
+        return;
+    }
+
+    bool success = await dbService.AddListingAsync(listingModel); // ✅ Store listing in DB
+
+    if (!success)
+    {
+        Console.WriteLine("Failed to add listing!");
+    }
+    else
+    {
+        listingModel = new ProductModel();
+        errorMessage = null;
+    }
+}
 }

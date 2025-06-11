@@ -27,6 +27,7 @@ else
                     <p>@listing.Nationality</p>
                     <p>@listing.Percent%</p>
                     <p>@listing.Age</p>
+                    <p>@listing.SellerName</p>
                     <p>
                     @if (!string.IsNullOrWhiteSpace(listing.ImageUrl))
                     {
@@ -37,44 +38,6 @@ else
             </div>
         }
     </div>
-    
-
-    @* <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Nationality</th>
-                <th>Percentage</th>
-                <th>Age</th>
-                <th>Image URL</th> 
-                <th>Customer</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in listings)
-            {
-                <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.Price.ToString("C")</td>
-                    <td>@item.Description</td>
-                    <td>@item.ProductType</td>
-                    <td>@item.Nationality</td>
-                    <td>@item.Percent%</td>
-                    <td>@item.Age</td>
-                    <td>
-                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
-                        {
-                            <a href="@item.ImageUrl" target="_blank">View</a>
-                        }
-                    </td>
-                </tr>
-                
-            }
-        </tbody>
-    </table> *@
 }
 <style>
     .Title{
@@ -122,7 +85,6 @@ else
 }
 </style>
 
-@code {
 
     @inject DBService dbService
 

@@ -30,4 +30,5 @@ public class ProductModel
 
     //public int? AlcoholId { get; set; } //do we need alcohol ID?
     public int CustomerID { get; set; }
+    public string SellerName { get; set; } = string.Empty;
 }

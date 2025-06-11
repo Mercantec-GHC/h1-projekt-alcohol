@@ -32,9 +32,9 @@ namespace Blazor_Markedsplads.Services
 
             const string sql = @"
                 INSERT INTO customer 
-                    (name, email, age, address, phone, isseller, password)
+                    (name, email, age, address, phone, password)
                 VALUES 
-                    (@name, @email, @age, @address, @phone, @isSeller, @password)
+                    (@name, @email, @age, @address, @phone, @password)
                 RETURNING id;
             ";
 
@@ -47,7 +47,6 @@ namespace Blazor_Markedsplads.Services
                     ? (object)DBNull.Value
                     : customer.Address);
             cmd.Parameters.AddWithValue("phone", customer.Phone);
-            cmd.Parameters.AddWithValue("isSeller", customer.IsSeller);
             cmd.Parameters.AddWithValue("password", customer.Password);
 
             int newId = Convert.ToInt32(await cmd.ExecuteScalarAsync());
@@ -70,7 +69,6 @@ namespace Blazor_Markedsplads.Services
                     age       = @age,
                     address   = @address,
                     phone     = @phone,
-                    isseller = @isSeller,
                     password  = @password
                 WHERE 
                     id = @id;
@@ -86,7 +84,6 @@ namespace Blazor_Markedsplads.Services
                     ? (object)DBNull.Value
                     : customer.Address);
             cmd.Parameters.AddWithValue("phone", customer.Phone);
-            cmd.Parameters.AddWithValue("isSeller", customer.IsSeller);
             cmd.Parameters.AddWithValue("password", customer.Password);
 
             int affected = await cmd.ExecuteNonQueryAsync();
@@ -110,5 +107,32 @@ namespace Blazor_Markedsplads.Services
             int affected = await cmd.ExecuteNonQueryAsync();
             return affected > 0;
         }
+        public async Task<CustomerModel?> GetCustomerByEmailAsync(string email)
+{
+    await using var connection = new NpgsqlConnection(_connectionString);
+    await connection.OpenAsync();
+
+    const string sql = @"
+        SELECT id, name, email, age, address
+        FROM customer
+        WHERE email = @email;
+    ";
+
+    await using var cmd = new NpgsqlCommand(sql, connection);
+    cmd.Parameters.AddWithValue("email", email);
+
+    await using var reader = await cmd.ExecuteReaderAsync();
+    if (!await reader.ReadAsync()) return null;
+
+    return new CustomerModel
+    {
+        ID = reader.GetInt32(reader.GetOrdinal("id")),
+        Name = reader.GetString(reader.GetOrdinal("name")),
+        Email = reader.GetString(reader.GetOrdinal("email")),
+        Age = reader.GetInt32(reader.GetOrdinal("age")),
+        Address = reader.GetString(reader.GetOrdinal("address"))
+    };
+}
     }
+
 }

@@ -1,6 +1,12 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <div class="profile"></div>
+﻿@inject NavigationManager Navigation
+@inject ProtectedSessionStorage SessionStorage
+@using Profile.Pages
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="nav-container">
+        <a href="/Profile" class="Profile-button">
+            <img src="https://cdn-icons-png.freepik.com/512/3567/3567769.png" alt="Profile" />
+        </a>
         @*<a class="navbar-brand" href="">Blazor-Markedsplads</a>*@
     </div>
 </div>
@@ -52,3 +58,9 @@
     </nav>
 </div>
 
+@code{
+    private void GoToProfile()
+    {
+        Navigation.NavigateTo("/Profile");
+    }
+}

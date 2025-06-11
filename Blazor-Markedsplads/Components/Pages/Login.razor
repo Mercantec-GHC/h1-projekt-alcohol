@@ -2,6 +2,7 @@
 @using Blazor_Markedsplads.Models
 @inject NavigationManager Navigation
 @using Blazor_Markedsplads.Services
+@inject ProtectedSessionStorage SessionStorage 
 
 
 @rendermode InteractiveServer
@@ -56,14 +57,19 @@
     {
         errorMessage = string.Empty;
 
-        
-        var (IsValid, IsSeller) = await loginService.ValidateLoginAsync(loginModel.Email, loginModel.Password!);
 
-      if (!IsValid)
+        var (IsValid, Name, Address, Age, UserId) = await loginService.ValidateLoginAsync(loginModel.Email, loginModel.Password!);
+
+        if (!IsValid)
         {
             errorMessage = "Invalid email or password.";
             return;
         }
+
+        // Store only the email in session storage
+        await SessionStorage.SetAsync("UserEmail", loginModel.Email);
+
         Navigation.NavigateTo("/");
+        StateHasChanged();
     }
 }

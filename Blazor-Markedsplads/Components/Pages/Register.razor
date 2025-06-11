@@ -1,10 +1,10 @@
 ﻿@page "/register"
 @using Blazor_Markedsplads.Models
 @using Blazor_Markedsplads.Services
- @rendermode InteractiveServer
-
+@rendermode InteractiveServer
 @inject CustomerService CustomerService
 @inject NavigationManager Navigation
+@inject ProtectedSessionStorage SessionStorage
 
 
 <h3 class="Title">User Registration</h3>
@@ -32,10 +32,6 @@
     <div class="form-group">
         <label for="phone">Phone</label>
         <InputNumber id="phone" class="form-control" @bind-Value="newCustomer.Phone" placeholder="Enter your phone number" />
-    </div>
-    <div class="form-group form-check">
-        <InputCheckbox id="isSeller" class="form-check-input" @bind-Value="newCustomer.IsSeller" />
-        <label class="form-check-label" for="isSeller">Is Seller?</label>
     </div>
     <div class="form-group">
         <label for="password">Password</label>
@@ -78,7 +74,7 @@
 
             message = $"Registration successful (ID = {createdId}). Redirecting to login…";
             await Task.Delay(1500);
-          //  Navigation.NavigateTo("/login"); // add again when login wqill be created
+            Navigation.NavigateTo("/login"); // add again when login wqill be created
         }
         catch (Exception ex)
         {
