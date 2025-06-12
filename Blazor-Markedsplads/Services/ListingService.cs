@@ -24,19 +24,19 @@ namespace Blazor_Markedsplads.Services
                 throw new ArgumentException("Listing must have a Title, Category, and valid Price.");
             }
 
-        var product = new ProductModel //creates Product to get its ID, using  DBService
-        {
-            ProductName = listing.Title,
-            Price = listing.Price,
-            ProductType = listing.Category,
-            // Description = listing.Description,
-            Nationality = listing.Nationality,
-            Percent = listing.Percent,
-            Age = listing.Age,
-            ImageUrl = listing.ImageUrl,
-            CustomerID = listing.CustomerId
-        };
-        int newProductId = _dbService.CreateProduct(product);
+            var product = new ProductModel //creates Product to get its ID, using  DBService
+            {
+                ProductName = listing.Title,
+                Price = listing.Price,
+                ProductType = listing.Category,
+                // Description = listing.Description,
+                Nationality = listing.Nationality,
+                Percent = listing.Percent,
+                Age = listing.Age,
+                ImageUrl = listing.ImageUrl,
+                CustomerID = listing.CustomerId
+            };
+            int newProductId = _dbService.CreateProduct(product);
 
             using var connection = new NpgsqlConnection(_connectionString);//new item in listing table with product id
             connection.Open();
@@ -74,6 +74,7 @@ namespace Blazor_Markedsplads.Services
                 throw;
             }
         }
+
         public async Task<List<ProductModel>> GetProductsByUserAsync(int customerId)
         {
             await using var connection = new NpgsqlConnection(_connectionString);
@@ -106,5 +107,19 @@ namespace Blazor_Markedsplads.Services
         }
     }
 }
+
+
+//private readonly string _connectionString;
+
+//public ListingService(IConfiguration configuration)
+//{
+//     _connectionString = configuration.GetConnectionString("DefaultConnection");
+//}
+//private readonly List<Product> listings = new List<Product>();
+
+//public void AddListing(Product item)
+//{
+//    listings.Add(item);
+//}
 
        

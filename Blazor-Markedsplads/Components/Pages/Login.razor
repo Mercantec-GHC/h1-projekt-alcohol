@@ -3,8 +3,6 @@
 @using Blazor_Markedsplads.Components
 @using Blazor_Markedsplads.Services
 @inject ProtectedSessionStorage SessionStorage 
-
-
 @rendermode InteractiveServer
 @inject LoginService loginService
 @inject SessionService SessionService
@@ -65,6 +63,7 @@
             errorMessage = "Invalid email or password.";
             return;
         }
+
         await SessionStorage.SetAsync("UserEmail", customer.Email);
         SessionService.Login(customer);
 

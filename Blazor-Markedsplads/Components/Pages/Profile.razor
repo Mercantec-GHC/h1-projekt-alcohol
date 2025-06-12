@@ -19,31 +19,31 @@
     <div class=" listing-container">
         @if (products != null && products.Any())
         {
-            @foreach (var product in products)
-            {
-                <div class="listings-box">
-                    <div class="listing-details">
-                        <p>@product.ProductName</p>
-                        <p>Price: @product.Price.ToString("C", new System.Globalization.CultureInfo("da-DK"))</p>
-                        <p>@product.ProductType</p>
-                        <p>@product.Description</p>
-                        <p>@product.Nationality</p>
-                        <p>@product.Percent%</p>
-                        <p>@product.Age</p>
-                        <p>@product.SellerName</p>
-                        <p>
-                            <img src="@product.ImageUrl" alt="@product.ProductName" width="100" class="listing-image" />
-                        </p>
+                @foreach (var product in products)
+                {
+                    <div class="listings-box">
+                        <div class="listing-details">
+                            <p>@product.ProductName</p>
+                            <p>Price: @product.Price.ToString("C", new System.Globalization.CultureInfo("da-DK"))</p>
+                            <p>@product.ProductType</p>
+                            <p>@product.Description</p>
+                            <p>@product.Nationality</p>
+                            <p>@product.Percent%</p>
+                            <p>@product.Age</p>
+                            <p>@product.SellerName</p>
+                            <p>
+                                <img src="@product.ImageUrl" alt="@product.ProductName" width="100" class="listing-image"/>
+                            </p>
+                        </div>
                     </div>
-                </div>
 
-            }
+                }
         }
         else
         {
-            <p>No listings found.</p>
-        }
-    </div>
+        <p>No listings found.</p>
+    }
+</div>
 }
 
 else
@@ -53,36 +53,36 @@ else
 }
 
 <style>
-     .listings-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .listing-details p {
-        margin: 2px 0; /* Reduces top and bottom spacing */
+ .listings-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
     }
-        .listings-box:hover {
-            transform: scale(1.05);
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
-        }
 
-        .listings-box {
-            width: 250px;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-            background-color: white;
-            transition: transform 0.3s ease-in-out;
-        }
+    .listing-details p {
+    margin: 2px 0; /* Reduces top and bottom spacing */
+}
+    .listings-box:hover {
+        transform: scale(1.05);
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    }
 
-        .listing-image {
-            width: 80%;
-            height: auto;
-            max-height: 200px;
-            border-radius: 5px;
-            justify-content: baseline;
-        }
+    .listings-box {
+        width: 250px;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        background-color: white;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .listing-image {
+        width: 80%;
+        height: auto;
+        max-height: 200px;
+        border-radius: 5px;
+        justify-content: baseline;
+    }
 </style>
 
 @code {
@@ -106,9 +106,8 @@ else
 
            // Fetch user details using email
             customerModel = await CustomerService.GetCustomerByEmailAsync(userEmail);
-            if (customerModel != null)
-            {
-                products = await listingService.GetProductsByUserAsync(customerModel.ID);
+            if(customerModel != null){
+                products = await listingService.GetProductsByUserAsync(customerModel.ID); 
             }
 
             isFirstRender = false;
