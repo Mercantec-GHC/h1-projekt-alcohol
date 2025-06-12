@@ -4,6 +4,8 @@
 @inject ProtectedSessionStorage SessionStorage
 @inject ListingService listingService
 @inject DBService dbService
+@inject SessionService SessionService
+@inject NavigationManager Navigation
 @inject CustomerService customerService
 
 <h3 class="Title">Create Listing</h3>
@@ -177,14 +179,24 @@
 
     bool success = await dbService.AddListingAsync(listingModel); // ✅ Store listing in DB
 
-    if (!success)
-    {
-        Console.WriteLine("Failed to add listing!");
+        if(!success)
+        {
+            Console.WriteLine("Failed to add listing!");
+        }else
+        {
+            listingModel = new ProductModel();
+        }
     }
-    else
+    private bool _redirected = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        listingModel = new ProductModel();
-        errorMessage = null;
+        if (firstRender && !SessionService.IsLoggedIn && !_redirected)
+        {
+            _redirected = true;
+            Navigation.NavigateTo("/login");
+        }
     }
 }
-}
+
+

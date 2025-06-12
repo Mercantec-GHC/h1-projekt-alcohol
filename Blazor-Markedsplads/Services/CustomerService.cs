@@ -69,6 +69,7 @@ namespace Blazor_Markedsplads.Services
                     age       = @age,
                     address   = @address,
                     phone     = @phone,
+
                     password  = @password
                 WHERE 
                     id = @id;

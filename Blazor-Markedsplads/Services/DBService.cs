@@ -5,12 +5,12 @@ namespace Blazor_Markedsplads.Services
     public partial class DBService
     {
         private readonly string _connectionString;
- 
+
         public DBService(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
- 
+
         public async Task<bool> TestConnectionAsync()
         {
             try
@@ -24,7 +24,7 @@ namespace Blazor_Markedsplads.Services
                 return false;
             }
         }
- 
+
         public async Task<List<CustomerModel>> GetAllUsers(string query)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -54,7 +54,7 @@ namespace Blazor_Markedsplads.Services
                 }
             }
         }
- 
+
         public async Task<bool> AddListingAsync(ProductModel listing)
         {
             try
@@ -63,19 +63,19 @@ namespace Blazor_Markedsplads.Services
                 await connection.OpenAsync();
                 //describtion, image_url - @describtion, @imageurl
                 string query = "INSERT INTO product (customer_id, product_name, price, product_type, image_url, nationality, percent, age) VALUES (@customerId, @product_name, @price, @product_type, @image_url, @nationality, @percent, @age)";
- 
+
                 using var command = new NpgsqlCommand(query, connection);
- 
+
                 command.Parameters.AddWithValue("@customerId", listing.CustomerID);
                 command.Parameters.AddWithValue("@product_name", listing.ProductName);
-                command.Parameters.AddWithValue("@description", listing.Description ?? (object)DBNull.Value);
+               // command.Parameters.AddWithValue("@description", listing.Description ?? (object)DBNull.Value);
                 command.Parameters.AddWithValue("@price", listing.Price);
                 command.Parameters.AddWithValue("@product_type", listing.ProductType);
                 command.Parameters.AddWithValue("@image_url", listing.ImageUrl);
                 command.Parameters.AddWithValue("@nationality", listing.Nationality);
                 command.Parameters.AddWithValue("@percent", listing.Percent);
                 command.Parameters.AddWithValue("@age", listing.Age);
- 
+
                 return await command.ExecuteNonQueryAsync() > 0;
             }
             catch (Exception ex)
@@ -85,13 +85,13 @@ namespace Blazor_Markedsplads.Services
                 return false;
             }
         }
- 
+
         //Added ListingService into DBService, 
         // so to keep database operations in one place
         public async Task<List<ProductModel>> GetAllListingsAsync()
         {
             var listings = new List<ProductModel>();
- 
+
             using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
  
@@ -99,7 +99,7 @@ namespace Blazor_Markedsplads.Services
  
             using var command = new NpgsqlCommand(query, connection);
             using var reader = await command.ExecuteReaderAsync();
- 
+
             while (await reader.ReadAsync())
             {
                 listings.Add(new ProductModel
@@ -119,13 +119,13 @@ namespace Blazor_Markedsplads.Services
             }
             return listings;
         }
- 
- 
+
+
         public int CreateProduct(ProductModel product)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
- 
+
             const string sql = @"
             INSERT INTO product
                 (product_name, price, product_type, image_url, nationalty, percent, age, customer_id)
@@ -133,23 +133,50 @@ namespace Blazor_Markedsplads.Services
                 (@p_name, @p_price, @p_type, @p_image, @p_nationality, @p_percent, @p_age, @p_customer)
             RETURNING id;
         ";
- 
+
             using var cmd = new NpgsqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("p_name", product.ProductName);
             cmd.Parameters.AddWithValue("p_price", product.Price);
             cmd.Parameters.AddWithValue("p_type", product.ProductType);
- 
+
             if (string.IsNullOrWhiteSpace(product.ImageUrl))
                 cmd.Parameters.AddWithValue("p_image", DBNull.Value);
             else
                 cmd.Parameters.AddWithValue("p_image", product.ImageUrl);
- 
+
             cmd.Parameters.AddWithValue("p_customer", product.CustomerID);
             cmd.Parameters.AddWithValue("p_nationality", product.Nationality);
             cmd.Parameters.AddWithValue("p_percent", product.Percent);
             cmd.Parameters.AddWithValue("p_age", product.Age);
- 
+
             return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+        public async Task<(string Name, int Phone)> GetSellerInfoAsync(int sellerId)
+        {
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            const string sql = @"
+                SELECT name, phone
+                  FROM customer
+                 WHERE id = @id
+                 LIMIT 1;
+            ";
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("id", sellerId);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            if (!await reader.ReadAsync())
+            {
+                // just in case, if there is no such seller 
+                return (Name: string.Empty, Phone: 0);
+            }
+
+            return (
+                Name: reader.GetString(reader.GetOrdinal("name")),
+                Phone: reader.GetInt32(reader.GetOrdinal("phone"))
+            );
         }
     }
 }

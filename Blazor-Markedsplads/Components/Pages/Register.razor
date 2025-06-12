@@ -5,7 +5,7 @@
 @inject CustomerService CustomerService
 @inject NavigationManager Navigation
 @inject ProtectedSessionStorage SessionStorage
-
+@inject SessionService SessionService
 
 <h3 class="Title">User Registration</h3>
 
@@ -33,12 +33,13 @@
         <label for="phone">Phone</label>
         <InputNumber id="phone" class="form-control" @bind-Value="newCustomer.Phone" placeholder="Enter your phone number" />
     </div>
+   
     <div class="form-group">
         <label for="password">Password</label>
         <InputText id="password" type="password" class="form-control" @bind-Value="newCustomer.Password" placeholder="Enter a password" />
     </div>
 
-     <button type="submit" class="btn btn-primary"> Register</button>
+    <button type="submit" class="btn btn-primary" style="margin-top:18px;">Register</button>
 </EditForm>
 
 @if (!string.IsNullOrEmpty(message))
@@ -64,21 +65,28 @@
 @code {
     private CustomerModel newCustomer = new();
     private string message = string.Empty;
-
     private async Task HandleRegister()
     {
         try
         {
-           
             int createdId = await CustomerService.CreateCustomerAsync(newCustomer);
 
-            message = $"Registration successful (ID = {createdId}). Redirecting to login…";
-            await Task.Delay(1500);
-            Navigation.NavigateTo("/login"); // add again when login wqill be created
+            if (createdId > 0)
+            {
+                newCustomer.ID = createdId;
+               
+                SessionService.Login(newCustomer);
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                message = "Registration failed.";
+            }
         }
         catch (Exception ex)
         {
             message = $"Error: {ex.Message}";
         }
     }
+
 }

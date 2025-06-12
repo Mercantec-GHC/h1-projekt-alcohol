@@ -5,6 +5,9 @@
 @rendermode InteractiveServer
 @inject ListingService listingService
 @inject DBService dbService
+@inject CartService CartService
+@inject SessionService SessionService
+@inject NavigationManager Navigation
 
 
 <h3 class="Title"<strong>All Listings</strong></h3>
@@ -15,29 +18,37 @@
 }
 else
 {
-    <div class="listings-container">
+     <div class="listings-container">
         @foreach (var listing in listings)
         {
             <div class="listings-box">
                 <div class="listing-details">
                     <p>@listing.ProductName</p>
-                    <p>@listing.Price.ToString("C")</p>
+                    <p> @listing.Price.ToString("C", new System.Globalization.CultureInfo("da-DK"))</p>
                     <p>@listing.Description</p>
                     <p>@listing.ProductType</p>
                     <p>@listing.Nationality</p>
                     <p>@listing.Percent%</p>
                     <p>@listing.Age</p>
-                    <p>@listing.SellerName</p>
                     <p>
-                    @if (!string.IsNullOrWhiteSpace(listing.ImageUrl))
-                    {
-                        <img src="@listing.ImageUrl" alt="Listing Image" class="listing-image" />
-                    }
+                        @if (!string.IsNullOrWhiteSpace(listing.ImageUrl))
+                        {
+                            <img src="@listing.ImageUrl" alt="Listing Image" class="listing-image" />
+                        }
                     </p>
+                    <div class="add-to-cart-controls">
+                        <input type="number" min="1" style="width: 60px"
+                               @bind="listing.QuantityToAdd" />
+                        <button @onclick="@(() => AddToCart(listing, listing.QuantityToAdd))">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
             </div>
         }
     </div>
+
+  
 }
 <style>
     .Title{
@@ -82,28 +93,55 @@ else
         max-height: 200px;
         border-radius: 5px;
         justify-content: baseline;
-}
+    }
+
+    .add-to-cart-controls {
+        margin-top: 8px;
+        display: flex;
+        gap: 8px;
+    }
 </style>
 
 
-    @inject DBService dbService
 
 @code {
+    
     private List<ProductModel> listings = new();
 
     protected override async Task OnInitializedAsync()
     {
         listings = await dbService.GetAllListingsAsync();
     }
+    private void AddToCart(ProductModel product, int quantity)
+    {
+        CartService.AddToCartAsync(product, quantity);
+        
+    }
+    private bool _redirected = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !SessionService.IsLoggedIn && !_redirected)
+        {
+            _redirected = true; 
+            Navigation.NavigateTo("/login");
+        }
+    }
+    // protected override void OnInitialized()
+    // {
+    //     if (!SessionService.IsLoggedIn)
+    //     {
+    //         Navigation.NavigateTo("/login");
+    //     }
+    // }
+
 }
+
 
     @* private IEnumerable<ProductModel> listings = Array.Empty<ProductModel>();
 
     @* private IEnumerable<ProductModel> listings = Array.Empty<ProductModel>();*@
 
 
-    // protected override void OnInitialized()
-    // {
-    //     listings = listingService.GetAllListings();download all the listnig from in-memory
-    // } 
+   
 }
