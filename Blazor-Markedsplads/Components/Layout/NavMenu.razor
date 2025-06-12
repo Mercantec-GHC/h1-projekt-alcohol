@@ -1,20 +1,15 @@
 ﻿@inject NavigationManager Navigation
 @inject ProtectedSessionStorage SessionStorage
-@using Profile.Pages
+@using Blazor_Markedsplads.Components
 @using Blazor_Markedsplads.Services
+@rendermode InteractiveServer
 @inject CartService CartService
-
+ 
 <div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-    <img src="images/logo.png" alt="Illigohol Logo" class="profile-logo" />
-    @*<a class="navbar-brand" href="">Blazor-Markedsplads</a>*@
+<div class="container-fluid">
+<img src="images/logo.png" alt="Illigohol Logo" class="profile-logo" />
 </div>
-    <div class="nav-container">
-        <a href="/Profile" class="Profile-button">
-            <img src="https://cdn-icons-png.freepik.com/512/3567/3567769.png" alt="Profile" />
-        </a>
-        @*<a class="navbar-brand" href="">Blazor-Markedsplads</a>*@
-    </div>
+
 </div>
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
@@ -27,9 +22,13 @@
             </NavLink>
            
         </div>
-
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="listings">
+            <NavLink class="nav-link" href="/profile" Match="NavLinkMatch.All">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> 👤 Profile
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/listings" Match="NavLinkMatch.All">
                 <span class="oi oi-list-rich" aria-hidden="true"></span>📃 Listings
             </NavLink>
         </div>
@@ -46,14 +45,14 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="create-listing">
+            <NavLink class="nav-link" href="/create-listing" Match="NavLinkMatch.All">
                 <span class="oi oi-plus" aria-hidden="true"></span> 🍾 Create Listing
             </NavLink>
 
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="cart">
+            <NavLink class="nav-link" href="/cart" Match="NavLinkMatch.All">
                 🛒 Cart (@itemCount)
             </NavLink>
         </div>
@@ -62,15 +61,16 @@
 </div>
 
 <style>
-    .profile-logo {
+
+.profile-logo {
         width: 70px;
         height: 70px;
         border-radius: 50%;
         object-fit: cover;
         display: block;
-        margin: 0 auto 10px auto;
-    }
+        margin: 0 auto 10px auto;}
 </style>
+
 @code {
     private int itemCount;
 
