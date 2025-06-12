@@ -72,11 +72,7 @@
             <ValidationMessage For="@(() => listingModel.ImageUrl)" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Create Listing</button>
-        @if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <div class="alert alert-danger">@errorMessage</div>
-        }
+      
     </EditForm>
 </div>
 
@@ -160,7 +156,7 @@
     private ProductModel listingModel { get; set; } = new ProductModel();
     private string? errorMessage;
     private async Task HandleValidSubmit()
-{
+    {
     var emailResult = await SessionStorage.GetAsync<string>("UserEmail");
     var userEmail = emailResult.Success ? emailResult.Value : null;
 
@@ -198,5 +194,3 @@
         }
     }
 }
-
-

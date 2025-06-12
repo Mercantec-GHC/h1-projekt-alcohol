@@ -1,6 +1,8 @@
 ﻿@page "/register"
 @using Blazor_Markedsplads.Models
 @using Blazor_Markedsplads.Services
+@using Blazor_Markedsplads.Components
+
 @rendermode InteractiveServer
 @inject CustomerService CustomerService
 @inject NavigationManager Navigation
@@ -76,7 +78,7 @@
                 newCustomer.ID = createdId;
                
                 SessionService.Login(newCustomer);
-                Navigation.NavigateTo("/");
+                Navigation.NavigateTo("/Profile");
             }
             else
             {

@@ -9,27 +9,43 @@
 @inject SessionService SessionService
 @inject NavigationManager Navigation
 
+<div class="Title">Listings</div>
 
-<h3 class="Title"<strong>All Listings</strong></h3>
+<div class="filters">
+    <label>Alcohol type: </label>
+    <select @onchange="OnAlcoholTypeChanged">
+        <option value="">All</option>
+        <option value="Wine">Wine</option>
+        <option value="Beer">Beer</option>
+        <option value="SPIRITUS">Spiritus</option>
+    </select>
 
-@if (!listings.Any())
+    <label style="margin-left: 2rem;">Sort by Price: </label>
+    <select @onchange="OnSortOrderChanged">
+        <option value="asc">from low to high</option>
+        <option value="desc">from hight to low</option>
+    </select>
+
+</div>
+
+@if (!FilteredListings.Any())
 {
     <p>No listings yet.</p>
 }
 else
 {
-     <div class="listings-container">
-        @foreach (var listing in listings)
+    <div class="listings-container">
+        @foreach (var listing in FilteredListings)
         {
             <div class="listings-box">
                 <div class="listing-details">
                     <p>@listing.ProductName</p>
-                    <p> @listing.Price.ToString("C", new System.Globalization.CultureInfo("da-DK"))</p>
-                    <p>@listing.Description</p>
+                    <p>@listing.Price.ToString("C", new System.Globalization.CultureInfo("da-DK"))</p>
                     <p>@listing.ProductType</p>
                     <p>@listing.Nationality</p>
                     <p>@listing.Percent%</p>
                     <p>@listing.Age</p>
+                    <p>@listing.SellerName</p>
                     <p>
                         @if (!string.IsNullOrWhiteSpace(listing.ImageUrl))
                         {
@@ -47,23 +63,63 @@ else
             </div>
         }
     </div>
-
-  
 }
 <style>
-    .Title{
+   
+    .Title {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 15px;
+        padding: 10px 28px;
         border-radius: 50px;
-        @*Makes border more circuler*@
-        border: 1px solid black;
-        background-color: antiquewhite;
-        width: 500px;
-
+        border: 2px solid #433421;
+        background-color: #f6edd9;
+        width: fit-content;
+        margin: 2rem auto 2.5rem auto;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        box-shadow: 0 3px 14px rgba(120, 94, 43, 0.15);
     }
 
+    .filters {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.2rem;
+        padding: 0.8rem 1.3rem;
+        background: #fffbe7;
+        border-radius: 1.5rem;
+        margin: 0 auto 2.5rem auto;
+        box-shadow: 0 3px 12px rgba(112, 84, 40, 0.12);
+        width: fit-content;
+    }
+
+        .filters label {
+            font-size: 1.06rem;
+            font-weight: 600;
+            color: #71582c;
+            margin-right: 0.5rem;
+        }
+
+        .filters select {
+            padding: 0.45rem 1.1rem;
+            border-radius: 0.7rem;
+            border: 1.5px solid #c1a97a;
+            background: #faf3e4;
+            font-size: 1.08rem;
+            transition: border 0.2s;
+            outline: none;
+        }
+
+            .filters select:focus {
+                border: 1.5px solid #c8a142;
+                background: #fff9e6;
+            }
+
+    .listings-container {
+        margin-top: 2.5rem;
+    }
     .listings-container {
         display: flex;
         flex-wrap: wrap;
@@ -107,10 +163,31 @@ else
 @code {
     
     private List<ProductModel> listings = new();
+    private string selectedAlcohol = "";
+    private string sortOrder = "asc";
+
 
     protected override async Task OnInitializedAsync()
     {
         listings = await dbService.GetAllListingsAsync();
+    }
+    private IEnumerable<ProductModel> FilteredListings =>
+      (string.IsNullOrEmpty(selectedAlcohol)
+          ? listings
+          : listings.Where(l =>
+              !string.IsNullOrEmpty(l.ProductType) &&
+              l.ProductType.Contains(selectedAlcohol, StringComparison.OrdinalIgnoreCase)))
+      .OrderBy(l => sortOrder == "asc" ? l.Price : -l.Price);
+
+    private void OnAlcoholTypeChanged(ChangeEventArgs e)
+    {
+        selectedAlcohol = e?.Value?.ToString() ?? "";
+        StateHasChanged();
+    }
+    private void OnSortOrderChanged(ChangeEventArgs e)
+    {
+        sortOrder = e?.Value?.ToString() ?? "asc";
+        StateHasChanged();
     }
     private void AddToCart(ProductModel product, int quantity)
     {
@@ -127,20 +204,9 @@ else
             Navigation.NavigateTo("/login");
         }
     }
-    // protected override void OnInitialized()
-    // {
-    //     if (!SessionService.IsLoggedIn)
-    //     {
-    //         Navigation.NavigateTo("/login");
-    //     }
-    // }
+  
 
 }
-
-
-    @* private IEnumerable<ProductModel> listings = Array.Empty<ProductModel>();
-
-    @* private IEnumerable<ProductModel> listings = Array.Empty<ProductModel>();*@
 
 
    

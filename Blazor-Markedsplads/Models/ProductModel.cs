@@ -28,6 +28,7 @@ public class ProductModel
     public string? Nationality { get; set; }
     public int? Age { get; set; }
     public int QuantityToAdd { get; set; } = 1;
+   
 
     //public int? AlcoholId { get; set; } //do we need alcohol ID?
     public int CustomerID { get; set; }

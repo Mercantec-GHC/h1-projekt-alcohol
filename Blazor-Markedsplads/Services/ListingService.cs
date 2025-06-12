@@ -74,21 +74,37 @@ namespace Blazor_Markedsplads.Services
                 throw;
             }
         }
+        public async Task<List<ProductModel>> GetProductsByUserAsync(int customerId)
+        {
+            await using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            const string sql = @"SELECT id, product_name, price, description, product_type, image_url, age
+            FROM product WHERE customer_id = @customerId";
+
+            await using var cmd = new NpgsqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("customerId", customerId);
+
+            var products = new List<ProductModel>();
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                products.Add(new ProductModel
+                {
+                    ID = reader.GetInt32(reader.GetOrdinal("id")),
+                    ProductName = reader.GetString(reader.GetOrdinal("product_name")),
+                    Price = reader.GetDecimal(reader.GetOrdinal("price")),
+                    Description = reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString(reader.GetOrdinal("description")),
+                    ProductType = reader.GetString(reader.GetOrdinal("product_type")),
+                    ImageUrl = reader.GetString(reader.GetOrdinal("image_url")),
+                    Age = reader.GetInt32(reader.GetOrdinal("age"))
+                });
+            }
+
+            return products;
+        }
     }
 }
+
        
-
-    //private readonly string _connectionString;
-
-    //public ListingService(IConfiguration configuration)
-    //{
-    //     _connectionString = configuration.GetConnectionString("DefaultConnection");
-    //}
-    //private readonly List<Product> listings = new List<Product>();
-
-    //public void AddListing(Product item)
-    //{
-    //    listings.Add(item);
-    //}
-
-

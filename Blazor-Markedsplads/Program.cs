@@ -10,9 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-
 builder.Services.AddScoped<DBService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<CustomerService>();
@@ -20,6 +17,9 @@ builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddSingleton<CartService>();
 builder.Services.AddScoped<SessionService>();
+
+builder.Services.AddRazorPages(); 
+builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
 
@@ -38,6 +38,5 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
 
 app.Run();

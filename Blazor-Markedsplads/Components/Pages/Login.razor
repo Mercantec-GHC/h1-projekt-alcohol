@@ -1,6 +1,6 @@
 ﻿@page "/login"
 @using Blazor_Markedsplads.Models
-
+@using Blazor_Markedsplads.Components
 @using Blazor_Markedsplads.Services
 @inject ProtectedSessionStorage SessionStorage 
 
@@ -65,10 +65,10 @@
             errorMessage = "Invalid email or password.";
             return;
         }
-
+        await SessionStorage.SetAsync("UserEmail", customer.Email);
         SessionService.Login(customer);
 
-        Navigation.NavigateTo("/");
+        Navigation.NavigateTo("/Profile");
         StateHasChanged();
     }
 }
