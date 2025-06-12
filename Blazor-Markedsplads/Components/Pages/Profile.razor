@@ -104,7 +104,7 @@ else
                 return;
             }
 
-            // Fetch user details using email
+           // Fetch user details using email
             customerModel = await CustomerService.GetCustomerByEmailAsync(userEmail);
             if(customerModel != null){
                 products = await listingService.GetProductsByUserAsync(customerModel.ID); 

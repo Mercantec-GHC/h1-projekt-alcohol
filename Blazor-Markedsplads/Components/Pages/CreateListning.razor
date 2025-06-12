@@ -156,7 +156,7 @@
     private ProductModel listingModel { get; set; } = new ProductModel();
     private string? errorMessage;
     private async Task HandleValidSubmit()
-{
+    {
     var emailResult = await SessionStorage.GetAsync<string>("UserEmail");
     var userEmail = emailResult.Success ? emailResult.Value : null;
 
@@ -194,5 +194,3 @@
         }
     }
 }
-
-
