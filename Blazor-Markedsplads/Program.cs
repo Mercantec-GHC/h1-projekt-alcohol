@@ -14,9 +14,9 @@ builder.Services.AddScoped<DBService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<LoginService>();
-builder.Services.AddScoped<CartService>();
+//builder.Services.AddScoped<CartService>();
 builder.Services.AddSingleton<CartService>();
-builder.Services.AddScoped<SessionService>();
+builder.Services.AddSingleton<SessionService>();
 
 builder.Services.AddRazorPages(); 
 builder.Services.AddServerSideBlazor();

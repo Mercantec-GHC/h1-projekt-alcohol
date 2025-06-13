@@ -105,8 +105,34 @@ namespace Blazor_Markedsplads.Services
 
             return products;
         }
+
+        public async Task<CustomerModel?> GetCustomerByProductIdAsync(int productId)
+        {
+            await using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            const string sql = @"SELECT c.id, c.name, c.email
+                         FROM customer c
+                         JOIN product p ON c.id = p.customer_id
+                         WHERE p.id = @productId";
+
+            await using var cmd = new NpgsqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("productId", productId);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            if (!await reader.ReadAsync()) return null;
+
+            return new CustomerModel
+            {
+                ID = reader.GetInt32(reader.GetOrdinal("id")),
+                Name = reader.GetString(reader.GetOrdinal("name")),
+                Email = reader.GetString(reader.GetOrdinal("email"))
+            };
+        }
+
     }
 }
+
 
 
 //private readonly string _connectionString;

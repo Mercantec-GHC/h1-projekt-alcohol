@@ -4,7 +4,9 @@
 @inject CartService CartService
 @inject SessionService SessionService
 @inject NavigationManager Navigation
+@inject ListingService ListingService
  @rendermode InteractiveServer
+
 
 <h3>Your Cart</h3>
 
@@ -13,41 +15,53 @@
     <p>Your cart is empty.</p>
 }
 else
-{
-    @foreach (var group in CartService.GetItems().GroupBy(i => i.SellerName))
+{<table class="table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Subtotal</th>
+          <th>Seller</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+    @foreach (var item in CartService.GetItems())
     {
-        <div class="mb-4">
-            <h5>Seller: @group.Key (@group.First().SellerPhone)</h5>
-            <table class="table">
-                <thead>
-                    <tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in group)
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@item.Price.ToString("C", new System.Globalization.CultureInfo("da-DK"))</td>
+            <td>@item.Quantity</td>
+            <td>@item.TotalPrice.ToString("C", new System.Globalization.CultureInfo("da-DK"))</td>
+            <td>
+                @{
+                    sellerByProductId.TryGetValue(item.ID, out var seller);
+                    if (seller != null)
                     {
-                        <tr>
-                            <td>@item.ProductName</td>
-                            <td>@item.Price.ToString("C", new System.Globalization.CultureInfo("da-DK"))</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.TotalPrice.ToString("C", new System.Globalization.CultureInfo("da-DK"))</td>
-                            <td>
-                                <button class="btn btn-sm btn-danger"
-                                        @onclick="() => Remove(item.ID)">
-                                    Remove
-                                </button>
-                            </td>
-                        </tr>
+                        <b>@seller.Name</b>
+
+                        <br />
+                        <a href="mailto:@seller.Email">@seller.Email</a>
                     }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
-                        <td colspan="2">@group.Sum(x => x.TotalPrice).ToString("C", new System.Globalization.CultureInfo("da-DK"))</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+                    else
+                    {
+                        <span>Seller not found</span>
+                    }
+                }
+            </td>
+            <td>
+                <button class="btn btn-sm btn-danger"
+                        @onclick="() => Remove(item.ID)">
+                    Remove
+                </button>
+            </td>
+        </tr>
     }
+        </tbody>
+    </table>
+
+  
 
     <h5>Grand Total: @CartService.GrandTotal.ToString("C", new System.Globalization.CultureInfo("da-DK"))</h5>
     <button class="btn btn-secondary" @onclick="ClearCart">Clear Cart</button>
@@ -58,12 +72,18 @@ else
 }
 
 @code {
-    protected override void OnInitialized()
+    private Dictionary<int, CustomerModel?> sellerByProductId = new();
+
+    protected override async Task OnInitializedAsync()
     {
-      
+        foreach (var item in CartService.GetItems())
+        {
+            var seller = await ListingService.GetCustomerByProductIdAsync(item.ID);
+            sellerByProductId[item.ID] = seller;
+        }
+
         CartService.OnChange += OnCartChangedAsync;
     }
-
 
     public void Dispose()
     {

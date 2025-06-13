@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-//namespace Blazor_Markedsplads.Models;
+
 
 public class CustomerModel
 {
