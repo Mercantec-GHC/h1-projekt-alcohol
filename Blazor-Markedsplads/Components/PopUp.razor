@@ -83,10 +83,13 @@
 {
     <div class="popup-overlay">
         <div class="popup-content">
-            <p><strong>Age verification police here!</strong></p>
-            <p><strong>Are you over 18?</strong></p>
-            <button class="btn btn-primary me-2" @onclick="() => Verify(true)">18 Or Over</button>
-            <button class="btn btn-secondary" @onclick="() => Verify(false)">Under 18</button>
+            <div class="popup-details">
+                <p><strong>Age verification police here!</strong></p>
+                <p>Are you over 18?</p>
+
+                <button class="btn_btn-primary_me-2" @onclick="() => Verify(true)">18 Or Over</button>
+                <button class="btn_btn-secondary" @onclick="() => Verify(false)">Under 18</button>
+            </div>
         </div>
     </div>
 }
@@ -94,10 +97,11 @@
 {
     <div class="popup-overlay">
         <div class="popup-content">
-            <p><strong>Sorry, access is restricted for users under 18.</strong></p>
-            <p>Please come back when you're older!</p>
-            <button class="btn btn-secondary" @onclick="GoBack">Back</button>
-
+            <div class="popup-details2">
+                <p><strong>Sorry, access is restricted for users under 18.</strong></p>
+                <p>Please come back when you're older!</p>
+                <button class="btn_btn-secondary2" @onclick="GoBack">Back</button>
+            </div>
         </div>
     </div>
 }
@@ -116,11 +120,50 @@
     }
 
     .popup-content {
-        background: white;
-        padding: 80px;
+        background: #7d491f;
+        padding: 50px;
         border-radius: 10px;
         text-align: center;
+        border: 5px solid #4f3016; /* This adds a solid border */
     }
+
+    .popup-details{
+        background-color: #e8d0b1;
+        padding: 20px;/* Spacing inside the details */
+        font-size: 18px;/* Adjust text size */
+        width: 100%;/* Control width */
+        margin: auto;/* Center it */
+        border: 2px solid #4f3016;
+        border-radius: 5px;
+        box-sizing: border-box;/* Ensures padding doesn't enlarge the container */
+    }
+
+    .popup-details2{
+        background-color: #e8d0b1;
+        padding: 20px;/* Spacing inside the details */
+        font-size: 18px;/* Adjust text size */
+        width: 100%;/* Control width */
+        margin: auto;/* Center it */
+        border: 2px solid #4f3016;
+        border-radius: 5px;
+        box-sizing: border-box;/* Ensures padding doesn't enlarge the container */
+    }
+
+    .btn_btn-primary_me-2{
+        background-color:#bd8353;
+        border-radius: 10px;
+    }
+
+    .btn_btn-secondary{
+        background-color: #bd8353;
+        border-radius: 10px;
+    }
+
+    .btn_btn-secondary2{
+        background-color: #bd8353;
+        border-radius: 10px;
+    }
+
 </style>
 
 @code {
