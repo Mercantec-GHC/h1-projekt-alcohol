@@ -8,13 +8,17 @@
 
 @if (customerModel != null)
 {
-    <h1>Welcome, @customerModel.Name!</h1>
-    <p>Email: @customerModel.Email</p>
-    <p>Address: @customerModel.Address</p>
-    <p>Age: @customerModel.Age</p>
-    <button @onclick="Logout">Logout</button>
+    <div class="Information-container">
+        <h1>Welcome, @customerModel.Name!</h1>
+        <p>Email: @customerModel.Email</p>
+        <p>Address: @customerModel.Address</p>
+        <p>Age: @customerModel.Age</p>
+        <div class="button-box">
+            <button class="logout-button" @onclick="Logout">Logout</button>
+        </div>
+    </div>
 
-    <h2>Your Listings</h2>
+    <h2><strong>Your Listings</strong></h2>
 
     <div class=" listing-container">
         @if (products != null && products.Any())
@@ -52,6 +56,21 @@ else
 }
 
 <style>
+.Information-container{
+    background: antiquewhite;
+    padding: 20px;
+    border-radius: 50px;
+}
+
+.button-box{
+    display: flex;
+    justify-content: end;
+}
+
+.logout-button{
+    background-color: rgb(209, 125, 125);
+    border-radius: 35%;
+}
  .listings-container {
         display: flex;
         flex-wrap: wrap;

@@ -1,15 +1,5 @@
 # Markedsplads C2C Projekt
 
-## Overblik
-Dette projekt er en C2C (Consumer-to-Consumer) markedsplads bygget med Blazor, hvor brugere kan købe og sælge produkter direkte til hinanden.
-
-## Kom i gang
-
-### Forudsætninger
-- .NET SDK (nyeste version)
-- Visual Studio 2022 eller VS Code med C# extensions
-- Git
-
 ### Installation
 1. Klon repository'et
 
