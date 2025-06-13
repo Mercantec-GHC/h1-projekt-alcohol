@@ -9,6 +9,7 @@
 @inject ProtectedSessionStorage SessionStorage
 @inject SessionService SessionService
 
+
 <h3 class="Title">User Registration</h3>
 
 <EditForm Model="newCustomer" OnValidSubmit="HandleRegister" >
@@ -65,6 +66,8 @@
 </style>
 
 @code {
+    
+
     private CustomerModel newCustomer = new();
     private string message = string.Empty;
     private async Task HandleRegister()
@@ -77,7 +80,7 @@
             if (createdId > 0)
             {
                 newCustomer.ID = createdId;
-               
+                await SessionStorage.SetAsync("UserEmail", newCustomer.Email);
                 SessionService.Login(newCustomer);
                 Navigation.NavigateTo("/Profile");
             }

@@ -134,6 +134,7 @@ namespace Blazor_Markedsplads.Services
         Address = reader.GetString(reader.GetOrdinal("address"))
     };
 }
+
     }
 
 }

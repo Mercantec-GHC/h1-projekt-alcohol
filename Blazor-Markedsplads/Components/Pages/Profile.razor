@@ -5,6 +5,7 @@
 @inject NavigationManager Navigation
 @inject CustomerService CustomerService
 @inject ListingService listingService
+@inject SessionService SessionService
 
 @if (customerModel != null)
 {
@@ -113,6 +114,13 @@ else
     {
         if (firstRender)
         {
+            if (SessionService.CurrentUser != null)
+            {
+                customerModel = SessionService.CurrentUser;
+            }
+            else
+            {
+
             var emailResult = await SessionStorage.GetAsync<string>("UserEmail");
             userEmail = emailResult.Success ? emailResult.Value : null;
 
@@ -122,8 +130,15 @@ else
                 return;
             }
 
+
            // Fetch user details using email
             customerModel = await CustomerService.GetCustomerByEmailAsync(userEmail);
+                if (customerModel != null)
+                {
+                  
+                    SessionService.Login(customerModel);
+                }
+            }
             if(customerModel != null){
                 products = await listingService.GetProductsByUserAsync(customerModel.ID); 
             }
